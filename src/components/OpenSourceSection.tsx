@@ -23,7 +23,7 @@ export const OpenSourceSection: React.FC = () => {
               Public Code &amp; Repositories
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-              Public Android and Kotlin repositories hosted on GitHub. Descriptions marked with <code className="text-teal-600 dark:text-teal-400 font-mono text-xs">[ADD description]</code> can be updated as projects evolve.
+              Public Android and Kotlin repositories hosted on GitHub.
             </p>
           </div>
 

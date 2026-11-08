@@ -12,6 +12,7 @@ import { AboutSection } from './components/AboutSection';
 import { SelectedWorkSection } from './components/SelectedWorkSection';
 import { ExperienceTimeline } from './components/ExperienceTimeline';
 import { SkillsSection } from './components/SkillsSection';
+import { BeyondMobileSection } from './components/BeyondMobileSection';
 import { OpenSourceSection } from './components/OpenSourceSection';
 import { CertificationsSection } from './components/CertificationsSection';
 import { ContactSection } from './components/ContactSection';
@@ -53,6 +54,9 @@ export default function App() {
             highlightedSkillId={highlightedSkillId}
             onSelectSkill={(skill) => setHighlightedSkillId(skill)}
           />
+
+          {/* Beyond mobile: skills around the mobile core */}
+          <BeyondMobileSection />
 
           {/* 6. Open Source Repositories */}
           <OpenSourceSection />

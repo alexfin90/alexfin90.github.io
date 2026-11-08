@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * 
- * Alessandro Finocchiaro — Portfolio Data Source
+ * Alessandro Finocchiaro: Portfolio Data Source
  * All text, facts, metrics, links, and project records originate strictly from the CV.
  * Decoupled data model ready for export or Kotlin Multiplatform migration.
  */
@@ -72,12 +72,19 @@ export interface Certification {
 export interface PersonalInfo {
   name: string;
   title: string;
+  tagline: string;
   summary: string;
   email: string;
   linkedin: string;
   github: string;
   profilePhoto: string;
   about: string[];
+}
+
+export interface BeyondMobileItem {
+  title: string;
+  proof: string;
+  targetId: string; // section or element id to scroll to
 }
 
 export interface PortfolioConfig {
@@ -95,6 +102,8 @@ export const portfolioData: {
   timeline: TimelineEntry[];
   skills: SkillCategory[];
   openSource: OpenSourceRepo[];
+  beyondMobileIntro: string;
+  beyondMobile: BeyondMobileItem[];
   certifications: Certification[];
   education: {
     degree: string;
@@ -108,6 +117,7 @@ export const portfolioData: {
   personalInfo: {
     name: "Alessandro Finocchiaro",
     title: "Senior Android Engineer & Tech Lead",
+    tagline: "Mobile tech lead with end-to-end digital experience: apps, CMS, analytics, CRM, cloud and payments.",
     summary: "Senior Android Engineer and Tech Lead with 10+ years architecting and delivering high-scale consumer mobile applications for 100M+ active users across telecom, fintech, automotive, utilities, and embedded systems.",
     email: "alexfinocchiaro90@gmail.com",
     linkedin: "https://www.linkedin.com/in/alexfinocchiaro",
@@ -117,6 +127,7 @@ export const portfolioData: {
       "I wrote my first lines of code when I was six. That curiosity never left me. It took me to a Master's degree in Computer Engineering, and then to more than ten years of building apps used by millions of people.",
       "Life has not always been easy. Some hard moments taught me resilience, patience and how to keep going when things get tough. I bring that into my work: I stay calm under pressure, and I care about the people around me.",
       "I like clean, testable code that is easy to change. I follow new technology closely, but I adopt it only when it makes the product better.",
+      "I'm also passionate about finance and blockchain. I follow how money and technology meet, from mobile payments to DeFi, and it's part of why I enjoyed building TIM Pay.",
       "Outside work, you'll find me at the gym, following motorsport, or traveling."
     ]
   },
@@ -149,45 +160,50 @@ export const portfolioData: {
       company: "TIM (Telecom Italia)",
       period: "2019 – 2024",
       category: "Telecom",
-      summary: "Italy's most-used telecom application powering account management, billing, and connectivity for over 20M active users.",
+      summary: "Italy's most-used telecom app, part of TIM's mobile ecosystem serving 20M+ active users.",
       story: {
-        problem: "The application had legacy code maintained by an external consultancy, causing high bug volume and slow loading times.",
-        whatIDid: "Led the internalization transition to an internal squad, modernized the codebase to Kotlin and Clean Architecture, and coordinated cross-functional release plans.",
-        result: "Cut load times in half in key areas, reduced critical bugs by ~30%, and maintained 99.5% uptime SLA."
+        problem: "MyTIM was developed by an external consultancy, and TIM wanted to bring it in-house.",
+        whatIDid: "Led the internalization over 3-4 months, grew the squad to 4 Android and 3 iOS engineers, moved the code to Kotlin and Clean Architecture, and delivered a full UI restyling.",
+        result: "Load times cut in half in key areas, critical bugs down by ~30%, and a 99.5% uptime SLA maintained."
       },
       bulletPoints: [
-        "Led the Android team for MyTIM, Italy's most-used telecom app, coordinating with marketing, product, design, and backend teams.",
-        "Led internalization from an external consultancy: absorbed full ownership over 3-4 months, grew squad to 4 Android and 3 iOS engineers.",
-        "Transitioned codebase to Kotlin and Clean Architecture, delivering a full UI restyling with strict SLA compliance.",
-        "Coordinated Google Play Store release cycles across multiple apps with phased rollouts and telemetry monitoring.",
-        "Integrated Adobe AEM-driven content and Adobe Analytics tracking to optimize user journey conversions."
+        "Led the Android team for MyTIM, Italy's most-used telecom app, coordinating with marketing, product, design, and backend teams to align quarterly release roadmaps with business priorities.",
+        "Led the internalization of MyTIM from an external consultancy: absorbed full ownership over a 3-4 month transition and grew the internal squad to 4 Android and 3 iOS engineers.",
+        "Transitioned the codebase to Kotlin and Clean Architecture and delivered a full UI restyling, cutting load times in half in key areas and reducing critical bugs by ~30% while maintaining a 99.5% uptime SLA.",
+        "Coordinated Google Play Store release cycles across multiple apps, managing phased rollouts, store assets, and post-release monitoring in alignment with marketing campaigns.",
+        "Integrated Adobe AEM-driven content and Adobe Analytics tracking, using usage data to inform feature prioritization."
       ],
-      techStack: ["Kotlin", "Clean Architecture", "MVVM", "RxJava", "Retrofit", "Google Maps API", "Firebase", "Android Jetpack", "Adobe AEM"],
+      techStack: ["Kotlin", "MVVM", "Clean Architecture", "RxJava", "Retrofit", "Google Maps API", "Firebase", "Android Jetpack", "Adobe AEM", "Adobe Analytics"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.telecomitalia.centodiciannove",
       deviceType: "phone",
-      screenshots: [] // Screenshot coming soon - placeholder shown
+      screenshots: [
+        "/assets/projects/mytim_hero.webp",
+        "/assets/projects/mytim_3.webp",
+        "/assets/projects/mytim_4.webp",
+        "/assets/projects/mytim_5.webp",
+        "/assets/projects/mytim_6.webp"
+      ]
     },
     {
       id: "timpay",
       name: "TIM Pay",
-      clientContext: "Led at TIM in partnership with Hype / Banca Sella",
+      clientContext: "Led at TIM, in partnership with Hype / Banca Sella",
       company: "TIM / Hype",
-      period: "2019 – 2021",
+      period: "2019 – 2024",
       category: "Fintech",
-      summary: "Digital banking and payment app with 500K+ downloads and 4.6★ Play Store rating, featuring PSD2 biometric security.",
+      summary: "Payments app built in partnership with Hype and Banca Sella: 500K+ downloads and a 4.6★ Play Store rating.",
       story: {
-        problem: "Strict regulatory deadline to build a compliant PSD2 banking experience with dynamic transaction linking from scratch.",
-        whatIDid: "Designed and implemented Strong Customer Authentication (SCA), biometric authentication, and push-based two-factor flows as sole Android developer.",
-        result: "Delivered on schedule with 500K+ downloads, zero regulatory breaches, and a sustained 4.6★ user rating."
+        problem: "European PSD2 rules required Strong Customer Authentication, with a fixed regulatory deadline.",
+        whatIDid: "Designed and built SCA from scratch as the sole Android developer: biometric and push-based two-factor flows with dynamic transaction linking.",
+        result: "Led the app end to end: 500K+ downloads and a 4.6★ Play Store rating."
       },
       bulletPoints: [
-        "Led end-to-end development of TIM Pay in strategic partnership with Hype and Banca Sella.",
-        "Designed and built PSD2 Strong Customer Authentication (SCA) from scratch as sole Android developer against regulatory deadline.",
-        "Implemented biometric and push-based two-factor authentication flows with dynamic transaction linking.",
-        "Delivered 500K+ downloads and sustained a 4.6★ Google Play Store rating.",
-        "Managed secure token storage, banking APIs, and real-time fraud mitigation."
+        "Led end-to-end development of TIM Pay, in partnership with Hype and Banca Sella.",
+        "Designed and built PSD2 Strong Customer Authentication (SCA) from scratch, as sole Android developer against a regulatory deadline.",
+        "Implemented biometric and push-based two-factor flows with dynamic transaction linking.",
+        "500K+ downloads and a 4.6★ Google Play Store rating."
       ],
-      techStack: ["Kotlin", "Clean Architecture", "Biometrics", "PSD2 / SCA", "Push 2FA", "Security & Encryption", "Retrofit", "Room"],
+      techStack: ["Kotlin", "MVVM", "Clean Architecture", "PSD2 / SCA", "Biometrics", "Push-based 2FA", "Retrofit", "Firebase"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.hype.app",
       deviceType: "phone",
       screenshots: [
@@ -200,30 +216,29 @@ export const portfolioData: {
     {
       id: "technogym",
       name: "Biostrength & Biocircuit",
-      clientContext: "Architected at Technogym",
+      clientContext: "At Technogym",
       company: "Technogym",
       period: "May 2024 – Present",
       category: "Embedded",
-      summary: "Embedded Android OS powering AI-driven smart strength machines deployed in premium fitness facilities worldwide.",
+      summary: "Embedded Android OS powering Technogym's AI-driven strength machines, used in premium fitness facilities worldwide.",
       story: {
-        problem: "Multiple legacy machine apps with divergent architectures and maintenance overhead across different fitness product lines.",
-        whatIDid: "Unified multiple apps into a single mono-app under Clean Architecture, with progressive Jetpack Compose migration and real-time sensor processing.",
-        result: "Cut maintenance overhead by ~50%, reduced release cycles by ~35%, and enabled real-time AI biodata feedback during workouts."
+        problem: "Several legacy applications ran on the machines, each with its own architecture and maintenance cost.",
+        whatIDid: "Unified them into a single mono-app with Clean Architecture and a progressive Jetpack Compose migration, and refactored internal libraries with Kotlin Flow for real-time sensor data.",
+        result: "Maintenance overhead down by ~50%, plus more reliable sensor data for real-time biodata processing in AI-driven workouts."
       },
       bulletPoints: [
-        "Leading architectural modernization of embedded Android OS powering AI-driven strength machines (Biostrength, Biocircuit).",
-        "Unified multiple legacy applications into a single mono-app under Clean Architecture with progressive Jetpack Compose migration, reducing maintenance overhead by ~50%.",
-        "Refactored internal libraries using Kotlin Flow and reactive patterns, improving sensor data reliability and enabling real-time biodata processing.",
+        "Leading the architectural modernization of the embedded Android OS powering Technogym's AI-driven strength machines (Biostrength, Biocircuit).",
+        "Unified multiple legacy applications into a single mono-app under a Clean Architecture redesign with progressive Jetpack Compose migration, reducing maintenance overhead by ~50%.",
+        "Refactored internal libraries using Kotlin Flow and reactive patterns, improving sensor data reliability and enabling real-time biodata processing for AI-driven workouts.",
         "Architected a shared atomic design system across Cardio and Strength teams, accelerating feature development by ~50%.",
         "Implemented GitHub Actions CI/CD with device-based robotic testing and centralized Gradle convention plugins across 8+ product lines, cutting release cycles by ~35%."
       ],
-      techStack: ["Kotlin", "Jetpack Compose", "Kotlin Flow", "Coroutines", "Android NDK", "Clean Architecture", "Media3", "GitHub Actions", "Gradle Plugins"],
+      techStack: ["Kotlin", "Flow", "Coroutines", "Jetpack Compose", "Clean Architecture", "Android SDK/NDK", "GitHub Actions", "Gradle conventions", "Android Media3"],
       publicUrl: "https://www.technogym.com/en-INT/biostrength/",
       deviceType: "console",
       screenshots: [
-        "/assets/projects/technogym_1.webp",
         "/assets/projects/technogym_2.webp",
-        "/assets/projects/technogym_3.webp"
+        "/assets/projects/technogym_1.webp"
       ]
     },
     {
@@ -231,21 +246,19 @@ export const portfolioData: {
       name: "Lamborghini Unica",
       clientContext: "Built at Deloitte Digital for Lamborghini",
       company: "Deloitte Digital",
-      period: "2017 – 2019",
+      period: "2016 – 2019",
       category: "Automotive",
-      summary: "Connected Car companion application delivering vehicle telemetry, exclusive brand experiences, and remote status for Lamborghini owners.",
+      summary: "Connected car companion app for Lamborghini, in the premium automotive segment.",
       story: {
-        problem: "Ultra-high-net-worth owners needed a secure, luxury mobile experience to monitor their vehicles and access private factory events.",
-        whatIDid: "Developed vehicle connectivity modules, luxury UI interactions, and remote telemetry features matching Lamborghini brand guidelines.",
-        result: "Delivered the official companion app for flagship Lamborghini vehicles with global client distribution."
+        problem: "Lamborghini needed a companion app for its connected cars.",
+        whatIDid: "Developed the Lamborghini Unica connected car companion app as part of the Deloitte Digital team.",
+        result: "[ADD: the result you are proud of]"
       },
       bulletPoints: [
         "Developed the Lamborghini Unica Connected Car companion app for the premium automotive segment.",
-        "Architected secure telemetry communications and vehicle remote status features.",
-        "Engineered bespoke UI transitions matching the automotive brand aesthetic.",
-        "Coordinated store submission and client certification processes."
+        "Owned Play Store and App Store submission processes for client deliverables, including media asset preparation and release coordination."
       ],
-      techStack: ["Native Android", "Java/Kotlin", "Connected Car Telemetry", "REST APIs", "Security Protocols", "Custom Animation"],
+      techStack: ["Native Android (Java/Kotlin)", "iOS (Swift)", "Firebase", "REST APIs"],
       publicUrl: "https://www.lamborghini.com/it-en/servizi-al-cliente/app-clienti#val-ht",
       deviceType: "phone",
       screenshots: [
@@ -257,21 +270,19 @@ export const portfolioData: {
       name: "E.ON B2C",
       clientContext: "Built at Deloitte Digital for E.ON",
       company: "Deloitte Digital",
-      period: "2016 – 2018",
+      period: "2016 – 2019",
       category: "Utilities",
-      summary: "Energy customer management and smart home IoT platform with millions of device interactions and CMS-driven content.",
+      summary: "B2C utilities app for E.ON, with millions of IoT device interactions and CMS-driven content.",
       story: {
-        problem: "High volume of concurrent smart meter interactions and complex billing visualization across millions of domestic customers.",
-        whatIDid: "Architected the mobile client architecture supporting IoT device connectivity and CMS-driven campaign updates.",
-        result: "Delivered a reliable, scalable utility app supporting millions of monthly meter readings and bill payments."
+        problem: "A consumer energy app that had to handle IoT device interactions at scale and content managed from a CMS.",
+        whatIDid: "Architected the E.ON B2C app as part of the Deloitte Digital team.",
+        result: "[ADD: the result you are proud of]"
       },
       bulletPoints: [
-        "Architected utilities mobile solutions for E.ON B2C with millions of IoT device interactions.",
-        "Integrated Adobe CMS-driven dynamic content and personalized energy analytics.",
-        "Delivered responsive cross-platform architectures across native Android and iOS.",
-        "Owned app submission and QA testing cycles across diverse hardware profiles."
+        "Architected the E.ON B2C utilities app: millions of IoT device interactions and CMS-driven content.",
+        "Owned Play Store and App Store submission processes for client deliverables, including media asset preparation and release coordination."
       ],
-      techStack: ["Android (Java/Kotlin)", "IoT Connectivity", "Adobe CMS", "REST APIs", "Reactive Extensions", "Firebase"],
+      techStack: ["Native Android (Java/Kotlin)", "iOS (Swift)", "Firebase", "REST APIs"],
       publicUrl: "https://play.google.com/store/apps/details?id=com.eonenergia.eon",
       deviceType: "phone",
       screenshots: [
@@ -286,21 +297,19 @@ export const portfolioData: {
       name: "Estra",
       clientContext: "Built at Deloitte Digital for Estra",
       company: "Deloitte Digital",
-      period: "2017 – 2019",
+      period: "2016 – 2019",
       category: "Utilities",
-      summary: "Energy customer engagement and billing portal providing self-service contract management, consumption graphs, and bill payment.",
+      summary: "Energy customer engagement and content delivery app for Estra.",
       story: {
-        problem: "Customers needed an intuitive digital channel to handle self-metering, billing checks, and energy usage tracking.",
-        whatIDid: "Engineered user account management, bill payment modules, and dynamic consumption charts.",
-        result: "Significantly decreased customer care call volumes by automating core billing and meter submission tasks."
+        problem: "Estra wanted a mobile channel to engage its energy customers and deliver content.",
+        whatIDid: "Architected the Estra app as part of the Deloitte Digital team.",
+        result: "[ADD: the result you are proud of]"
       },
       bulletPoints: [
-        "Engineered customer self-service mobile app for energy and gas customer engagement.",
-        "Implemented real-time bill visualization, barcode/QR payment flows, and meter reading submissions.",
-        "Built robust offline caching and retry mechanisms for irregular network connectivity.",
-        "Coordinated multi-channel delivery on Google Play Store."
+        "Architected the Estra app for energy customer engagement and content delivery.",
+        "Owned Play Store and App Store submission processes for client deliverables, including media asset preparation and release coordination."
       ],
-      techStack: ["Android (Java/Kotlin)", "REST APIs", "Room/SQLite", "Payment Integrations", "Charts & Telemetry"],
+      techStack: ["Native Android (Java/Kotlin)", "iOS (Swift)", "Firebase", "REST APIs"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.estraspa.areaclienti",
       deviceType: "phone",
       screenshots: [
@@ -315,7 +324,7 @@ export const portfolioData: {
   timeline: [
     {
       company: "Technogym",
-      role: "Senior Android Engineer — Strength Team (Biostrength & Biocircuit)",
+      role: "Senior Android Engineer, Strength Team (Biostrength & Biocircuit)",
       period: "May 2024 – Present",
       location: "Remote, Italy",
       companyUrl: "https://www.linkedin.com/company/technogym/",
@@ -372,11 +381,9 @@ export const portfolioData: {
       companyUrl: "https://www.linkedin.com/company/stmicroelectronics/",
       summary: "Performance optimization of embedded systems and mobile applications through static and dynamic code analysis.",
       achievements: [
-        "Conducted static and dynamic code analysis to identify execution bottlenecks in embedded software.",
-        "Profiled memory footprint and CPU utilization for resource-constrained platforms.",
-        "Formulated optimization recommendations for low-power mobile execution."
+        "Performance optimization of embedded systems and mobile applications through static and dynamic code analysis."
       ],
-      techStack: ["C / C++", "Embedded Systems", "Static & Dynamic Code Analysis", "Performance Profiling"]
+      techStack: ["Embedded systems", "Static & dynamic code analysis", "Performance optimization"]
     }
   ],
 
@@ -439,7 +446,7 @@ export const portfolioData: {
         { name: "Flutter", projectIds: ["deloitte"] },
         { name: "React Native", projectIds: ["deloitte"] },
         { name: "Ionic", projectIds: ["deloitte"] },
-        { name: "Google Cloud Platform", projectIds: ["mytim"] },
+        { name: "Google Cloud Platform", projectIds: [] },
         { name: "Firebase", projectIds: ["mytim", "timpay", "deloitte"] },
         { name: "Adobe AEM & Analytics", projectIds: ["mytim", "eon"] },
         { name: "Salesforce Platform", projectIds: [] }
@@ -459,23 +466,25 @@ export const portfolioData: {
 
   openSource: [
     {
-      title: "alexfin90 / public-repositories",
-      description: "[ADD description - Public repositories on GitHub]",
-      tech: ["Kotlin", "Android", "Gradle"],
-      url: "https://github.com/alexfin90"
-    },
-    {
-      title: "android-clean-architecture-sample",
-      description: "[ADD description - Clean Architecture, Kotlin Coroutines, and Jetpack Compose patterns]",
-      tech: ["Kotlin", "Jetpack Compose", "Clean Architecture", "Coroutines"],
-      url: "https://github.com/alexfin90"
-    },
-    {
-      title: "gradle-convention-plugins-starter",
-      description: "[ADD description - Centralized build logic and multi-module dependency management]",
-      tech: ["Gradle", "Kotlin DSL", "CI/CD"],
-      url: "https://github.com/alexfin90"
+      title: "StocksTracker",
+      description: "Real-time stock price tracker: WebSocket feed, 100% Jetpack Compose, MVVM + Clean Architecture, multi-module Gradle with convention plugins, Kotlin Flow, Hilt, unit and Compose UI tests.",
+      tech: ["Kotlin", "Jetpack Compose", "Flow", "Hilt", "Clean Architecture"],
+      url: "https://github.com/alexfin90/StocksTracker"
     }
+  ],
+
+  beyondMobileIntro: "Mobile is my core. These are the pieces around it that I have worked with.",
+  beyondMobile: [
+    { title: "Payments & security", proof: "Built PSD2 Strong Customer Authentication from scratch for TIM Pay.", targetId: "work" },
+    { title: "Finance & fintech", proof: "Built TIM Pay with Hype and Banca Sella, including PSD2 authentication. Personal interest in finance, blockchain and DeFi.", targetId: "work" },
+    { title: "CMS & content", proof: "Integrated Adobe AEM content into the TIM apps, and built CMS-driven apps for E.ON.", targetId: "work" },
+    { title: "Analytics & data", proof: "Used Adobe Analytics data to prioritize features and support marketing campaigns at TIM.", targetId: "experience" },
+    { title: "CRM", proof: "Salesforce Certified Platform Developer I and Administrator.", targetId: "certifications" },
+    { title: "Cloud", proof: "Google Cloud Associate Cloud Engineer, and Firebase across many apps.", targetId: "certifications" },
+    { title: "Release & DevOps", proof: "GitHub Actions CI/CD and Gradle convention plugins across 8+ product lines at Technogym; phased Play Store rollouts at TIM.", targetId: "experience" },
+    { title: "Pre-sales & estimation", proof: "Tech lead on RFPs and estimations that won €2M+ in client projects at Deloitte Digital.", targetId: "experience" },
+    { title: "Teams & Agile", proof: "Grew the MyTIM squad to 4 Android and 3 iOS engineers. CSM and CSPO certified.", targetId: "experience" },
+    { title: "Cross-platform", proof: "Delivered apps in native Android, iOS (Swift), Flutter, React Native and Ionic.", targetId: "experience" }
   ],
 
   certifications: [

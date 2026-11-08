@@ -92,13 +92,16 @@ export const HeroSection: React.FC = () => {
               {/* Title & Name */}
               <div className="text-center sm:text-left">
                 <span className="text-xs font-semibold text-teal-600 dark:text-teal-400 tracking-wide uppercase">
-                  Staff / Principal Track
+                  Portfolio
                 </span>
                 <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-0.5">
                   {personalInfo.name}
                 </h1>
                 <p className="font-display text-lg sm:text-xl font-medium text-slate-700 dark:text-slate-300 mt-1">
                   {personalInfo.title}
+                </p>
+                <p className="text-sm sm:text-base text-teal-700 dark:text-teal-300 mt-2 max-w-xl">
+                  {personalInfo.tagline}
                 </p>
               </div>
             </div>

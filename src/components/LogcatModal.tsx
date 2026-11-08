@@ -29,14 +29,14 @@ export const LogcatModal: React.FC<LogcatModalProps> = ({ isOpen, onClose }) => 
     { time: '10:24:00.120', pid: '2048-2052', level: 'D', tag: 'Architecture', message: 'Clean Architecture initialized: Domain, Data, Presentation layers separated.' },
     { time: '10:24:00.142', pid: '2048-2052', level: 'I', tag: 'CareerMetrics', message: 'scale_users: 100M+ active users | MAU_owned: 20M+ | years_exp: 10+' },
     { time: '10:24:00.180', pid: '2048-2060', level: 'D', tag: 'JetpackCompose', message: 'Atomic design system instantiated across Cardio & Strength platforms.' },
-    { time: '10:24:00.210', pid: '2048-2060', level: 'I', tag: 'TechnogymOS', message: 'Real-time sensor biodata pipeline active: StateFlow & Coroutines processing @ 60Hz.' },
+    { time: '10:24:00.210', pid: '2048-2060', level: 'I', tag: 'TechnogymOS', message: 'Real-time sensor biodata pipeline active: Kotlin Flow & Coroutines.' },
     { time: '10:24:00.250', pid: '2048-2070', level: 'I', tag: 'TIM_MyTIM', message: 'Internalization complete: reduced critical bugs by ~30%, 99.5% uptime SLA achieved.' },
-    { time: '10:24:00.290', pid: '2048-2070', level: 'I', tag: 'TIM_Pay', message: 'PSD2 SCA biometric authentication & dynamic transaction linking passed zero-defect audit.' },
-    { time: '10:24:00.320', pid: '2048-2080', level: 'D', tag: 'Lamborghini', message: 'Vehicle telemetry companion service connected to high-performance platform.' },
+    { time: '10:24:00.290', pid: '2048-2070', level: 'I', tag: 'TIM_Pay', message: 'PSD2 SCA from scratch: biometric + push 2FA with dynamic transaction linking.' },
+    { time: '10:24:00.320', pid: '2048-2080', level: 'D', tag: 'Lamborghini', message: 'Lamborghini Unica connected car companion app delivered at Deloitte Digital.' },
     { time: '10:24:00.360', pid: '2048-2080', level: 'I', tag: 'AgileLeadership', message: 'CSM® & CSPO® verified. Sprint cycle acceleration +25% with AI tooling.' },
     { time: '10:24:00.410', pid: '2048-2090', level: 'W', tag: 'Philosophy', message: 'Reminder: Adopt new technology only when it genuinely elevates the product.' },
     { time: '10:24:00.450', pid: '2048-2090', level: 'I', tag: 'AboutMe', message: 'Coding since age 6. Calm under pressure. Cares about people, code, and quality.' },
-    { time: '10:24:00.490', pid: '2048-2090', level: 'I', tag: 'Status', message: 'Available for technical discussions: alexfinocchiaro90@gmail.com' },
+    { time: '10:24:00.490', pid: '2048-2090', level: 'I', tag: 'Contact', message: 'Say hi: alexfinocchiaro90@gmail.com' },
   ];
 
   const [logs, setLogs] = useState<LogEntry[]>(initialLogs);
@@ -82,7 +82,7 @@ export const LogcatModal: React.FC<LogcatModalProps> = ({ isOpen, onClose }) => 
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-teal-400" />
               <span id="logcat-title" className="font-semibold text-slate-100">
-                Logcat — com.alexfinocchiaro.portfolio (Pixel 9 Pro · API 35)
+                Logcat: com.alexfinocchiaro.portfolio (Pixel 9 Pro · API 35)
               </span>
             </div>
 

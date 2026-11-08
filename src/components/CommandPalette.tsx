@@ -65,6 +65,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
+      id: 'beyond',
+      label: 'Jump to Beyond Mobile',
+      section: 'Navigation',
+      icon: Cpu,
+      action: () => {
+        document.getElementById('beyond')?.scrollIntoView({ behavior: 'smooth' });
+        onClose();
+      },
+    },
+    {
       id: 'certifications',
       label: 'Jump to Certifications',
       section: 'Navigation',

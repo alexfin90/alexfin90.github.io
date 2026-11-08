@@ -20,6 +20,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
     { label: 'Work', href: '#work' },
     { label: 'Experience', href: '#experience' },
     { label: 'Skills', href: '#skills' },
+    // wideOnly: hidden in the desktop bar below xl, where it would crowd the row
+    { label: 'Beyond mobile', href: '#beyond', wideOnly: true },
     { label: 'Certifications', href: '#certifications' },
     { label: 'Contact', href: '#contact' },
   ];
@@ -42,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
             <a
               key={link.href}
               href={link.href}
-              className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0 py-1"
+              className={`${'wideOnly' in link ? 'hidden xl:inline' : ''} hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0 py-1`}
             >
               {link.label}
             </a>
