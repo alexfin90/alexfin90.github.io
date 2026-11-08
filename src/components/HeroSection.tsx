@@ -1,0 +1,198 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { portfolioData } from '../data/portfolioData';
+import { PhoneFrame } from './PhoneFrame';
+import { ArrowDown, Send, Github, Linkedin } from 'lucide-react';
+
+export const HeroSection: React.FC = () => {
+  const { personalInfo, metrics, projects } = portfolioData;
+
+  // Cycle through featured screenshots on hero phone
+  const heroScreenshots = [
+    { image: projects[0].screenshots[0], name: projects[0].name, company: projects[0].company },
+    { image: projects[1].screenshots[0], name: projects[1].name, company: projects[1].company },
+    { image: projects[2].screenshots[0], name: projects[2].name, company: projects[2].company },
+    { image: projects[3].screenshots[0], name: projects[3].name, company: projects[3].company },
+  ];
+
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroScreenshots.length);
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [heroScreenshots.length]);
+
+  return (
+    <section className="relative overflow-hidden pt-8 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/60 dark:border-slate-800/60">
+      {/* Background soft ambient radial gradient */}
+      <div
+        className="pointer-events-none absolute -top-40 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-teal-500/10 blur-[120px] dark:bg-teal-500/15"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute top-1/2 -left-40 -z-10 h-[400px] w-[400px] rounded-full bg-teal-600/5 blur-[100px] dark:bg-teal-600/10"
+        aria-hidden="true"
+      />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Split Grid: Left info & profile, Right interactive phone */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Profile Avatar + Bio + CTAs */}
+          <div className="lg:col-span-7 flex flex-col items-start">
+            {/* Profile Avatar + Name Row */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 mb-6">
+              {/* Profile Photo with subtle animated ring in accent Deep Teal */}
+              <div className="relative group shrink-0">
+                {/* Animated pulsating ring */}
+                <div
+                  className="absolute -inset-1 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 opacity-75 blur-sm group-hover:opacity-100 transition-opacity animate-pulse duration-3000"
+                  aria-hidden="true"
+                />
+                <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-full overflow-hidden p-1 bg-white dark:bg-slate-900 ring-2 ring-teal-500/80 shadow-xl">
+                  <img
+                    src={personalInfo.profilePhoto}
+                    alt="Alessandro Finocchiaro"
+                    className="h-full w-full object-cover object-top rounded-full transition-transform duration-500 group-hover:scale-105"
+                    width={400}
+                    height={400}
+                    loading="eager"
+                  />
+                </div>
+              </div>
+
+              {/* Title & Name */}
+              <div className="text-center sm:text-left">
+                <span className="text-xs font-semibold text-teal-600 dark:text-teal-400 tracking-wide uppercase">
+                  Staff / Principal Track
+                </span>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-0.5">
+                  {personalInfo.name}
+                </h1>
+                <p className="font-display text-lg sm:text-xl font-medium text-slate-700 dark:text-slate-300 mt-1">
+                  {personalInfo.title}
+                </p>
+              </div>
+            </div>
+
+            {/* One-line summary verbatim from CV */}
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl text-balance">
+              {personalInfo.summary}
+            </p>
+
+            {/* CTAs and social links */}
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href="#work"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-500 dark:bg-teal-500 dark:hover:bg-teal-400 dark:text-slate-950 rounded-xl shadow-md shadow-teal-700/10 transition-all hover:-translate-y-0.5"
+              >
+                <span>See my work</span>
+                <ArrowDown className="w-4 h-4" />
+              </a>
+
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all hover:-translate-y-0.5"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Contact me</span>
+              </a>
+
+              <div className="flex items-center gap-2 sm:ml-2">
+                <a
+                  href={personalInfo.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors"
+                  aria-label="GitHub profile"
+                >
+                  <Github className="w-4 h-4" />
+                </a>
+
+                <a
+                  href={personalInfo.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-colors"
+                  aria-label="LinkedIn profile"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Quick tech chip summary */}
+            <div className="mt-8 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <span className="font-medium text-slate-700 dark:text-slate-300">Core Focus:</span>
+              <span>Clean Architecture</span>
+              <span aria-hidden="true">·</span>
+              <span>Kotlin &amp; Jetpack Compose</span>
+              <span aria-hidden="true">·</span>
+              <span>20M+ MAU Delivery</span>
+              <span aria-hidden="true">·</span>
+              <span>CSM® &amp; CSPO®</span>
+            </div>
+          </div>
+
+          {/* Right Column: Hero Phone Mockup */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center">
+            <div className="relative">
+              <PhoneFrame
+                currentImage={heroScreenshots[currentHeroIndex].image}
+                appName={heroScreenshots[currentHeroIndex].name}
+                appCompany={heroScreenshots[currentHeroIndex].company}
+                isHero={true}
+              />
+
+              {/* Navigation dots below phone */}
+              <div className="mt-3 flex items-center justify-center gap-2">
+                {heroScreenshots.map((item, index) => (
+                  <button
+                    key={item.name}
+                    onClick={() => setCurrentHeroIndex(index)}
+                    aria-label={`View ${item.name}`}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      index === currentHeroIndex
+                        ? 'w-6 bg-teal-600 dark:bg-teal-400'
+                        : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Full-width 3 Key Stats Strip below the hero split */}
+        <div className="mt-14 pt-10 border-t border-slate-200 dark:border-slate-800/80 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {metrics.map((metric) => (
+            <motion.div
+              key={metric.label}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-sm"
+            >
+              <div className="font-display text-4xl sm:text-5xl font-extrabold text-teal-600 dark:text-teal-400 tracking-tight tabular-nums">
+                {metric.value}
+              </div>
+              <div className="font-display font-semibold text-base text-slate-900 dark:text-white mt-1">
+                {metric.label}
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                {metric.description}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
