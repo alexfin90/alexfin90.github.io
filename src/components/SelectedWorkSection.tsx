@@ -165,10 +165,12 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
                         <span className="font-semibold text-teal-600 dark:text-teal-400">Execution: </span>
                         <span className="text-slate-600 dark:text-slate-400">{project.story.whatIDid}</span>
                       </div>
-                      <div>
-                        <span className="font-semibold text-emerald-600 dark:text-emerald-400">Result: </span>
-                        <span className="text-slate-600 dark:text-slate-400">{project.story.result}</span>
-                      </div>
+                      {!project.story.result.startsWith('[ADD') && (
+                        <div>
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">Result: </span>
+                          <span className="text-slate-600 dark:text-slate-400">{project.story.result}</span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Tech Chips */}

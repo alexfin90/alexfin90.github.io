@@ -5,7 +5,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Activity, Bluetooth, Wifi, Heart, Dumbbell, ShieldAlert, Sparkles } from 'lucide-react';
+import { Bluetooth, Wifi, Heart, Dumbbell } from 'lucide-react';
 
 interface ConsoleFrameProps {
   currentImage?: string;
@@ -89,14 +89,8 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
               <span className="font-semibold tracking-wider text-[10px] uppercase text-teal-400">
-                AI Biostrength OS
+                Embedded Android
               </span>
-            </div>
-
-            {/* Center optical camera / biodata sensor punch-out */}
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-900/90 border border-slate-700/60">
-              <div className="h-2 w-2 rounded-full bg-teal-500/80 ring-1 ring-teal-400/40" />
-              <span className="text-[9px] text-slate-300">Biometric Sensor</span>
             </div>
 
             {/* Gym Telemetry Connection Indicators */}
@@ -104,7 +98,6 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
               <Heart className="w-3 h-3 text-rose-500" />
               <Bluetooth className="w-3 h-3 text-sky-400" />
               <Wifi className="w-3 h-3 text-teal-400" />
-              <span className="text-[10px] text-slate-300">60 FPS</span>
             </div>
           </div>
 
@@ -129,18 +122,6 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
                   className="h-full w-full object-cover object-center"
                   loading={isHero ? 'eager' : 'lazy'}
                 />
-
-                {/* Workout biodata overlay HUD */}
-                <div className="absolute top-3 left-3 z-20 flex gap-2">
-                  <div className="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-white flex items-center gap-1.5">
-                    <Activity className="w-3.5 h-3.5 text-teal-400" />
-                    <span className="font-mono text-xs font-bold tabular-nums">480W</span>
-                  </div>
-                  <div className="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-white flex items-center gap-1.5">
-                    <Dumbbell className="w-3.5 h-3.5 text-amber-400" />
-                    <span className="font-mono text-xs font-bold tabular-nums">65kg · Rep 8/12</span>
-                  </div>
-                </div>
               </motion.div>
             ) : (
               /* Clean Placeholder inside console frame */
@@ -165,15 +146,6 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
               <span className="text-[10px] font-mono text-teal-300 px-2 py-0.5 rounded bg-teal-950/80 border border-teal-800/40">
                 Embedded Console
               </span>
-            </div>
-          </div>
-
-          {/* Machine Bottom Edge Trim */}
-          <div className="relative z-30 py-1 px-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-500">
-            <span>Biostrength Engine v2.4</span>
-            <div className="flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <span>Sensors Calibrated</span>
             </div>
           </div>
         </div>

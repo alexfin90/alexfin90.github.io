@@ -50,6 +50,8 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
   }, [project, onClose, nextSlide, prevSlide]);
 
   if (!project) return null;
+  // Placeholder results stay in the data but are not shown.
+  const hasResult = !project.story.result.startsWith('[ADD');
 
   return (
     <AnimatePresence>
@@ -187,7 +189,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
             </div>
 
             {/* Problem / What I Did / Result Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className={`grid grid-cols-1 gap-4 ${hasResult ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
               <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">
                   Challenge
@@ -206,14 +208,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
-                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">
-                  Impact &amp; Result
-                </span>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                  {project.story.result}
-                </p>
-              </div>
+              {hasResult && (
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800">
+                  <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">
+                    Impact &amp; Result
+                  </span>
+                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                    {project.story.result}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Full CV Bullet Points */}

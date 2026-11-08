@@ -88,6 +88,8 @@ export interface BeyondMobileItem {
 }
 
 export interface PortfolioConfig {
+  contactFormEnabled: boolean;
+  contactSubtitle: string;
   formEndpoint: string;
   privacyNote: string;
   githubProfileUrl: string;
@@ -177,7 +179,6 @@ export const portfolioData: {
       publicUrl: "https://play.google.com/store/apps/details?id=it.telecomitalia.centodiciannove",
       deviceType: "phone",
       screenshots: [
-        "/assets/projects/mytim_hero.webp",
         "/assets/projects/mytim_3.webp",
         "/assets/projects/mytim_4.webp",
         "/assets/projects/mytim_5.webp",
@@ -533,6 +534,9 @@ export const portfolioData: {
   ],
 
   config: {
+    // Turn on only after formEndpoint has a real Formspree ID.
+    contactFormEnabled: false,
+    contactSubtitle: "Happy to talk about Android, mobile architecture and building great teams.",
     // Paste your Formspree endpoint URL here, e.g. "https://formspree.io/f/mqkvnxyz"
     formEndpoint: "https://formspree.io/f/[ADD_YOUR_FORMSPREE_ENDPOINT_ID]",
     privacyNote: "Your data is used only to reply to your message. It is never shared or stored for marketing.",

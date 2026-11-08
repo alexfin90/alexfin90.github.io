@@ -80,18 +80,9 @@ export const ContactSection: React.FC = () => {
       // Check if user has pasted a real endpoint or using placeholder
       const isPlaceholder = config.formEndpoint.includes('[ADD_YOUR_FORMSPREE_ENDPOINT_ID]');
 
+      // Never fake success: without a real endpoint the message would be lost.
       if (isPlaceholder) {
-        // Graceful mock completion for demo purposes while warning in console
-        await new Promise((resolve) => setTimeout(resolve, 900));
-        setStatus('success');
-        confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.7 },
-          colors: ['#0d9488', '#14b8a6', '#2dd4bf', '#38bdf8'],
-        });
-        setFormData({ name: '', email: '', message: '', honeypot: '' });
-        return;
+        throw new Error(`The contact form is not set up yet. Please email ${personalInfo.email}.`);
       }
 
       const response = await fetch(config.formEndpoint, {
@@ -139,20 +130,22 @@ export const ContactSection: React.FC = () => {
             Get in Touch
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
-            Discussing senior mobile architecture, tech leadership opportunities, or technical advisory engagements.
+            {config.contactSubtitle}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Left Column: Direct Alternative Channels */}
-          <div className="md:col-span-5 space-y-4">
+          <div className={config.contactFormEnabled ? 'md:col-span-5 space-y-4' : 'md:col-span-12 w-full max-w-md mx-auto space-y-4'}>
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-4">
               <h3 className="font-display font-bold text-base text-slate-900 dark:text-white">
                 Direct Channels
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Prefer direct communication? Connect via email or social platforms below.
-              </p>
+              {config.contactFormEnabled && (
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Prefer direct communication? Connect via email or social platforms below.
+                </p>
+              )}
 
               <div className="space-y-3 pt-2">
                 {/* Email Direct */}
@@ -210,7 +203,8 @@ export const ContactSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Contact Form */}
+          {/* Right Column: Contact Form (hidden until config.contactFormEnabled) */}
+          {config.contactFormEnabled && (
           <div className="md:col-span-7">
             <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-sm">
               <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -379,6 +373,7 @@ export const ContactSection: React.FC = () => {
               </form>
             </div>
           </div>
+          )}
         </div>
       </div>
     </section>
