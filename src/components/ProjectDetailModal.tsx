@@ -6,7 +6,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Project } from '../data/portfolioData';
-import { X, ExternalLink, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { X, ExternalLink, ChevronLeft, ChevronRight, CheckCircle2, Monitor, Smartphone, Image as ImageIcon } from 'lucide-react';
+import { DeviceShowcase } from './DeviceShowcase';
 
 interface ProjectDetailModalProps {
   project: Project | null;
@@ -73,15 +74,31 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10"
+          className="relative w-full max-w-4xl max-h-[92vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col z-10"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
             <div>
-              <span className="text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">
-                {project.category} · {project.period}
-              </span>
-              <h3 id="modal-project-title" className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+              <div className="flex items-center gap-2 text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">
+                <span>{project.category}</span>
+                <span aria-hidden="true">·</span>
+                <span>{project.period}</span>
+                <span aria-hidden="true">·</span>
+                <span className="flex items-center gap-1 font-mono text-slate-500">
+                  {project.deviceType === 'console' ? (
+                    <>
+                      <Monitor className="w-3.5 h-3.5 text-teal-500" />
+                      <span>Console OS</span>
+                    </>
+                  ) : (
+                    <>
+                      <Smartphone className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Phone App</span>
+                    </>
+                  )}
+                </span>
+              </div>
+              <h3 id="modal-project-title" className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                 {project.name}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -101,7 +118,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
               </a>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -111,66 +128,63 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ project,
 
           {/* Modal Content Body */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
-            {/* Screenshot Carousel (Touch & Drag enabled) */}
-            {project.screenshots.length > 0 && (
-              <div className="relative rounded-2xl bg-slate-950 p-4 sm:p-6 overflow-hidden border border-slate-800 flex flex-col items-center">
-                <div className="relative h-72 sm:h-96 w-full flex items-center justify-center">
-                  <motion.div
-                    key={currentSlide}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.25 }}
-                    className="h-full flex items-center justify-center"
-                  >
-                    <img
-                      src={project.screenshots[currentSlide]}
-                      alt={`${project.name} screenshot ${currentSlide + 1}`}
-                      className="max-h-full max-w-full object-contain rounded-xl shadow-lg"
-                      loading="eager"
-                    />
-                  </motion.div>
+            {/* Device Frame Viewport (Phone or Console with swipeable carousel) */}
+            <div className="relative rounded-2xl bg-slate-950 p-4 sm:p-6 overflow-hidden border border-slate-800 flex flex-col items-center">
+              <div className="relative w-full flex items-center justify-center">
+                {/* Device Frame inside modal */}
+                <DeviceShowcase
+                  deviceType={project.deviceType}
+                  currentImage={project.screenshots[currentSlide]}
+                  appName={project.name}
+                  appCompany={project.company}
+                />
 
-                  {/* Carousel Controls */}
-                  {totalSlides > 1 && (
-                    <>
-                      <button
-                        onClick={prevSlide}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 backdrop-blur-sm transition-colors cursor-pointer"
-                        aria-label="Previous screenshot"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={nextSlide}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 backdrop-blur-sm transition-colors cursor-pointer"
-                        aria-label="Next screenshot"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                {/* Thumbnails / Indicators */}
+                {/* Carousel Controls (if multiple slides exist) */}
                 {totalSlides > 1 && (
-                  <div className="mt-4 flex items-center gap-2">
-                    {project.screenshots.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentSlide(idx)}
-                        aria-label={`Go to slide ${idx + 1}`}
-                        className={`h-2 rounded-full transition-all cursor-pointer ${
-                          idx === currentSlide
-                            ? 'w-6 bg-teal-400'
-                            : 'w-2 bg-slate-600 hover:bg-slate-500'
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <>
+                    <button
+                      onClick={prevSlide}
+                      className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 backdrop-blur-sm transition-colors cursor-pointer z-30"
+                      aria-label="Previous screenshot"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={nextSlide}
+                      className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white border border-slate-700 backdrop-blur-sm transition-colors cursor-pointer z-30"
+                      aria-label="Next screenshot"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
                 )}
               </div>
-            )}
+
+              {/* Thumbnails / Indicators */}
+              {totalSlides > 1 && (
+                <div className="mt-4 flex items-center gap-2 z-30">
+                  {project.screenshots.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentSlide(idx)}
+                      aria-label={`Go to slide ${idx + 1}`}
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
+                        idx === currentSlide
+                          ? 'w-6 bg-teal-400'
+                          : 'w-2 bg-slate-600 hover:bg-slate-500'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Notice for placeholder state */}
+              {totalSlides === 0 && (
+                <div className="mt-3 text-center text-xs text-slate-400 font-mono">
+                  Custom screenshots can be uploaded directly to replace placeholder
+                </div>
+              )}
+            </div>
 
             {/* Problem / What I Did / Result Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

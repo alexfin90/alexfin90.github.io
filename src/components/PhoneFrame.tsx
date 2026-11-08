@@ -5,10 +5,10 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Wifi, BatteryMedium, Signal } from 'lucide-react';
+import { Wifi, BatteryMedium, Signal, Smartphone, Image as ImageIcon } from 'lucide-react';
 
 interface PhoneFrameProps {
-  currentImage: string;
+  currentImage?: string;
   appName: string;
   appCompany?: string;
   isHero?: boolean;
@@ -45,8 +45,6 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
   const springConfig = { damping: 25, stiffness: 180 };
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springConfig);
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), springConfig);
-  const shadowX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springConfig);
-  const shadowY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-15, 15]), springConfig);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isReducedMotion || !containerRef.current) return;
@@ -61,6 +59,8 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
     mouseX.set(0);
     mouseY.set(0);
   };
+
+  const hasRealScreenshot = Boolean(currentImage && currentImage.trim() !== '');
 
   return (
     <div
@@ -104,8 +104,8 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
             {/* Gloss reflection glare overlay */}
             <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12] rounded-[36px]" />
 
-            {/* Screen Image with smooth cross-fade */}
-            {currentImage && (
+            {/* Screen Image or Clean Placeholder */}
+            {hasRealScreenshot ? (
               <motion.img
                 key={currentImage}
                 src={currentImage}
@@ -115,38 +115,67 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
                 animate={{ opacity: imageLoaded ? 1 : 0, scale: 1 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
                 className="absolute inset-0 h-full w-full object-cover object-top"
-                loading={isHero ? "eager" : "lazy"}
+                loading={isHero ? 'eager' : 'lazy'}
               />
-            )}
-
-            {/* Fallback & Loading state card */}
-            {!imageLoaded && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-slate-900 to-slate-950 text-white">
-                <div className="h-12 w-12 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center mb-3 text-teal-400 font-display font-bold text-xl">
-                  {appName.charAt(0)}
+            ) : (
+              /* Clean Placeholder inside phone frame */
+              <div className="absolute inset-0 flex flex-col items-center justify-between p-6 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white select-none">
+                {/* Simulated App Header Wireframe */}
+                <div className="w-full pt-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <span className="font-display font-bold text-sm tracking-tight text-white">{appName}</span>
+                    <span className="text-[10px] font-mono text-teal-400">v4.0</span>
+                  </div>
                 </div>
-                <div className="font-display font-semibold text-sm text-slate-100">{appName}</div>
-                {appCompany && (
-                  <div className="text-xs text-slate-400 mt-1">{appCompany}</div>
-                )}
-                <div className="mt-4 flex gap-1">
-                  <div className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
-                  <div className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse delay-100" />
-                  <div className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse delay-200" />
+
+                {/* Central "Screenshot coming soon" badge & wireframe cards */}
+                <div className="w-full flex flex-col items-center text-center my-auto space-y-4">
+                  <div className="h-14 w-14 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+                    <ImageIcon className="w-7 h-7" />
+                  </div>
+
+                  <div>
+                    <h4 className="font-display font-bold text-base text-slate-100">{appName}</h4>
+                    <p className="text-xs font-mono text-teal-400 font-medium mt-1">Screenshot coming soon</p>
+                    <p className="text-[11px] text-slate-400 mt-1 max-w-[200px] mx-auto leading-relaxed">
+                      High-resolution screenshots will be uploaded soon.
+                    </p>
+                  </div>
+
+                  {/* Simulated App UI Skeleton Blocks */}
+                  <div className="w-full space-y-2 pt-2 px-2">
+                    <div className="h-10 w-full rounded-xl bg-slate-800/60 border border-slate-700/40 p-2 flex items-center justify-between">
+                      <div className="h-2 w-20 rounded bg-slate-700" />
+                      <div className="h-4 w-12 rounded bg-teal-500/20" />
+                    </div>
+                    <div className="h-16 w-full rounded-xl bg-slate-800/40 border border-slate-800 p-2.5 flex flex-col justify-between">
+                      <div className="h-2 w-28 rounded bg-slate-700" />
+                      <div className="h-2 w-16 rounded bg-slate-800" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom App identifier pill */}
+                <div className="w-full pb-1 text-center">
+                  <span className="text-[10px] font-mono text-slate-500">
+                    Client Deliverable · Production
+                  </span>
                 </div>
               </div>
             )}
 
-            {/* Subtle bottom app badge indicator */}
-            <div className="absolute bottom-4 left-3 right-3 z-20 px-3 py-2 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/10 flex items-center justify-between text-xs text-white">
-              <div className="truncate">
-                <span className="font-semibold">{appName}</span>
-                {appCompany && <span className="text-slate-400 text-[11px] block truncate">{appCompany}</span>}
+            {/* Subtle bottom app badge indicator (only shown when real screenshot is displayed) */}
+            {hasRealScreenshot && (
+              <div className="absolute bottom-4 left-3 right-3 z-20 px-3 py-2 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/10 flex items-center justify-between text-xs text-white">
+                <div className="truncate">
+                  <span className="font-semibold">{appName}</span>
+                  {appCompany && <span className="text-slate-400 text-[11px] block truncate">{appCompany}</span>}
+                </div>
+                <span className="text-[10px] font-mono text-teal-400 px-1.5 py-0.5 rounded bg-teal-950/60 border border-teal-800/40 shrink-0">
+                  Android
+                </span>
               </div>
-              <span className="text-[10px] font-mono text-teal-400 px-1.5 py-0.5 rounded bg-teal-950/60 border border-teal-800/40 shrink-0">
-                Android
-              </span>
-            </div>
+            )}
           </div>
 
           {/* Android gesture navigation bar */}

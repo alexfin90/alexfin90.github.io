@@ -6,18 +6,38 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { portfolioData } from '../data/portfolioData';
-import { PhoneFrame } from './PhoneFrame';
-import { ArrowDown, Send, Github, Linkedin } from 'lucide-react';
+import { DeviceShowcase } from './DeviceShowcase';
+import { ArrowDown, Send, Github, Linkedin, Monitor, Smartphone } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   const { personalInfo, metrics, projects } = portfolioData;
 
-  // Cycle through featured screenshots on hero phone
+  // Cycle through featured projects on hero device frame (incorporating console and phone)
   const heroScreenshots = [
-    { image: projects[0].screenshots[0], name: projects[0].name, company: projects[0].company },
-    { image: projects[1].screenshots[0], name: projects[1].name, company: projects[1].company },
-    { image: projects[2].screenshots[0], name: projects[2].name, company: projects[2].company },
-    { image: projects[3].screenshots[0], name: projects[3].name, company: projects[3].company },
+    {
+      image: projects[0].screenshots[0] || '',
+      name: projects[0].name,
+      company: projects[0].company,
+      deviceType: projects[0].deviceType,
+    },
+    {
+      image: projects[1].screenshots[0] || '',
+      name: projects[1].name,
+      company: projects[1].company,
+      deviceType: projects[1].deviceType,
+    },
+    {
+      image: projects[2].screenshots[0] || '',
+      name: projects[2].name,
+      company: projects[2].company,
+      deviceType: projects[2].deviceType,
+    },
+    {
+      image: projects[3].screenshots[0] || '',
+      name: projects[3].name,
+      company: projects[3].company,
+      deviceType: projects[3].deviceType,
+    },
   ];
 
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
@@ -25,9 +45,11 @@ export const HeroSection: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentHeroIndex((prev) => (prev + 1) % heroScreenshots.length);
-    }, 3800);
+    }, 4200);
     return () => clearInterval(interval);
   }, [heroScreenshots.length]);
+
+  const activeHeroItem = heroScreenshots[currentHeroIndex];
 
   return (
     <section className="relative overflow-hidden pt-8 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/60 dark:border-slate-800/60">
@@ -42,8 +64,8 @@ export const HeroSection: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Split Grid: Left info & profile, Right interactive phone */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* Split Grid: Left info & profile, Right interactive device showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Column: Profile Avatar + Bio + CTAs */}
           <div className="lg:col-span-7 flex flex-col items-start">
             {/* Profile Avatar + Name Row */}
@@ -140,30 +162,39 @@ export const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Hero Phone Mockup */}
+          {/* Right Column: Dynamic Device Showcase (Smoothly switches between Phone and Console) */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative">
-              <PhoneFrame
-                currentImage={heroScreenshots[currentHeroIndex].image}
-                appName={heroScreenshots[currentHeroIndex].name}
-                appCompany={heroScreenshots[currentHeroIndex].company}
+            <div className="w-full flex flex-col items-center">
+              <DeviceShowcase
+                deviceType={activeHeroItem.deviceType}
+                currentImage={activeHeroItem.image}
+                appName={activeHeroItem.name}
+                appCompany={activeHeroItem.company}
                 isHero={true}
               />
 
-              {/* Navigation dots below phone */}
-              <div className="mt-3 flex items-center justify-center gap-2">
-                {heroScreenshots.map((item, index) => (
-                  <button
-                    key={item.name}
-                    onClick={() => setCurrentHeroIndex(index)}
-                    aria-label={`View ${item.name}`}
-                    className={`h-2 rounded-full transition-all cursor-pointer ${
-                      index === currentHeroIndex
-                        ? 'w-6 bg-teal-600 dark:bg-teal-400'
-                        : 'w-2 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
-                    }`}
-                  />
-                ))}
+              {/* Navigation selector dots with device icons */}
+              <div className="mt-4 flex items-center justify-center gap-3">
+                {heroScreenshots.map((item, index) => {
+                  const isSelected = index === currentHeroIndex;
+                  const Icon = item.deviceType === 'console' ? Monitor : Smartphone;
+
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => setCurrentHeroIndex(index)}
+                      aria-label={`View ${item.name} (${item.deviceType})`}
+                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-teal-600 text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Icon className="w-3 h-3" />
+                      <span className="hidden sm:inline font-medium text-[11px]">{item.name}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

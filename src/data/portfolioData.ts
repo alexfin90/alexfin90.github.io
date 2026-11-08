@@ -32,6 +32,7 @@ export interface Project {
   techStack: string[];
   publicUrl: string;
   screenshots: string[];
+  deviceType: 'phone' | 'console';
 }
 
 export interface TimelineEntry {
@@ -163,14 +164,8 @@ export const portfolioData: {
       ],
       techStack: ["Kotlin", "Clean Architecture", "MVVM", "RxJava", "Retrofit", "Google Maps API", "Firebase", "Android Jetpack", "Adobe AEM"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.telecomitalia.centodiciannove",
-      screenshots: [
-        "/assets/projects/mytim_1.webp",
-        "/assets/projects/mytim_2.webp",
-        "/assets/projects/mytim_3.webp",
-        "/assets/projects/mytim_4.webp",
-        "/assets/projects/mytim_5.webp",
-        "/assets/projects/mytim_6.webp"
-      ]
+      deviceType: "phone",
+      screenshots: [] // Screenshot coming soon - placeholder shown
     },
     {
       id: "timpay",
@@ -194,9 +189,8 @@ export const portfolioData: {
       ],
       techStack: ["Kotlin", "Clean Architecture", "Biometrics", "PSD2 / SCA", "Push 2FA", "Security & Encryption", "Retrofit", "Room"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.hype.app",
+      deviceType: "phone",
       screenshots: [
-        "/assets/projects/timpay_1.webp",
-        "/assets/projects/timpay_2.webp",
         "/assets/projects/timpay_3.webp",
         "/assets/projects/timpay_4.webp",
         "/assets/projects/timpay_5.webp",
@@ -225,6 +219,7 @@ export const portfolioData: {
       ],
       techStack: ["Kotlin", "Jetpack Compose", "Kotlin Flow", "Coroutines", "Android NDK", "Clean Architecture", "Media3", "GitHub Actions", "Gradle Plugins"],
       publicUrl: "https://www.technogym.com/en-INT/biostrength/",
+      deviceType: "console",
       screenshots: [
         "/assets/projects/technogym_1.webp",
         "/assets/projects/technogym_2.webp",
@@ -252,6 +247,7 @@ export const portfolioData: {
       ],
       techStack: ["Native Android", "Java/Kotlin", "Connected Car Telemetry", "REST APIs", "Security Protocols", "Custom Animation"],
       publicUrl: "https://www.lamborghini.com/it-en/servizi-al-cliente/app-clienti#val-ht",
+      deviceType: "phone",
       screenshots: [
         "/assets/projects/lamborghini_1.webp"
       ]
@@ -277,9 +273,8 @@ export const portfolioData: {
       ],
       techStack: ["Android (Java/Kotlin)", "IoT Connectivity", "Adobe CMS", "REST APIs", "Reactive Extensions", "Firebase"],
       publicUrl: "https://play.google.com/store/apps/details?id=com.eonenergia.eon",
+      deviceType: "phone",
       screenshots: [
-        "/assets/projects/eon_1.webp",
-        "/assets/projects/eon_2.webp",
         "/assets/projects/eon_3.webp",
         "/assets/projects/eon_4.webp",
         "/assets/projects/eon_5.webp",
@@ -307,9 +302,8 @@ export const portfolioData: {
       ],
       techStack: ["Android (Java/Kotlin)", "REST APIs", "Room/SQLite", "Payment Integrations", "Charts & Telemetry"],
       publicUrl: "https://play.google.com/store/apps/details?id=it.estraspa.areaclienti",
+      deviceType: "phone",
       screenshots: [
-        "/assets/projects/estra_1.webp",
-        "/assets/projects/estra_2.webp",
         "/assets/projects/estra_3.webp",
         "/assets/projects/estra_4.webp",
         "/assets/projects/estra_5.webp",

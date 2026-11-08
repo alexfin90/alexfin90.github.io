@@ -6,9 +6,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData, Project } from '../data/portfolioData';
-import { PhoneFrame } from './PhoneFrame';
+import { DeviceShowcase } from './DeviceShowcase';
 import { ProjectDetailModal } from './ProjectDetailModal';
-import { ExternalLink, Layers, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, Layers, ArrowUpRight, Smartphone, Monitor } from 'lucide-react';
 
 interface SelectedWorkSectionProps {
   highlightedSkillId: string | null;
@@ -27,12 +27,11 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
     return p.category === selectedCategory;
   });
 
-  // Track project visibility to update phone screen in scroll-driven mode
+  // Track project visibility to update device frame in scroll-driven mode
   const projectItemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
 
       for (const p of filteredProjects) {
@@ -66,11 +65,11 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
               Production Applications
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-              Scroll through featured applications built for Fortune 500 enterprises, national telecom operators, and premium AI fitness hardware.
+              Scroll through featured applications. The frame automatically morphs between native smartphone and embedded gym machine console.
             </p>
           </div>
 
-          {/* Filter Segmented Control (Allowed interactive buttons with click handlers) */}
+          {/* Filter Segmented Control */}
           <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
             {projectCategories.map((category) => (
               <button
@@ -88,7 +87,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
           </div>
         </div>
 
-        {/* Storytelling Grid: Desktop Split with Sticky Phone Mockup */}
+        {/* Storytelling Grid: Desktop Split with Sticky Dynamic Device Mockup */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Project Cards List */}
           <div className="lg:col-span-7 space-y-8">
@@ -126,6 +125,20 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
                         <span className="font-semibold text-teal-600 dark:text-teal-400">{project.category}</span>
                         <span aria-hidden="true">·</span>
                         <span>{project.period}</span>
+                        <span aria-hidden="true">·</span>
+                        <span className="flex items-center gap-1 text-[11px] font-mono">
+                          {project.deviceType === 'console' ? (
+                            <>
+                              <Monitor className="w-3 h-3 text-teal-500" />
+                              <span>Console OS</span>
+                            </>
+                          ) : (
+                            <>
+                              <Smartphone className="w-3 h-3 text-slate-400" />
+                              <span>Mobile</span>
+                            </>
+                          )}
+                        </span>
                       </div>
                       <span className="font-mono text-[11px] text-slate-400 dark:text-slate-500">
                         {project.clientContext}
@@ -201,20 +214,21 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
             </AnimatePresence>
           </div>
 
-          {/* Right Column: Sticky Phone Mockup */}
+          {/* Right Column: Sticky Morphing Device Showcase */}
           <div className="hidden lg:block lg:col-span-5 sticky top-24">
             <div className="p-4 rounded-3xl bg-slate-100/60 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/60 flex flex-col items-center">
-              <PhoneFrame
+              <DeviceShowcase
+                deviceType={activeProject.deviceType}
                 currentImage={activeProject.screenshots[0]}
                 appName={activeProject.name}
                 appCompany={activeProject.company}
               />
               <div className="mt-3 text-center">
                 <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Showing live screen: <strong className="text-slate-800 dark:text-slate-200">{activeProject.name}</strong>
+                  Target: <strong className="text-slate-800 dark:text-slate-200">{activeProject.name}</strong> ({activeProject.deviceType === 'console' ? 'Embedded Console Display' : 'Android Smartphone'})
                 </span>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  Screenshots cycle with scroll or card hover
+                  Frame morphs smoothly between smartphone and gym machine touchscreen
                 </p>
               </div>
             </div>
