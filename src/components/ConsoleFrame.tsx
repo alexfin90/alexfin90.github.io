@@ -5,6 +5,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { portfolioData } from '../data/portfolioData';
 import { Bluetooth, Wifi, Heart, Dumbbell } from 'lucide-react';
 
 interface ConsoleFrameProps {
@@ -94,7 +95,7 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
               <span className="font-semibold tracking-wider text-[10px] uppercase text-teal-400">
-                Embedded Android
+                {portfolioData.uiText.consoleStatusLabel}
               </span>
             </div>
 
@@ -138,7 +139,7 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
                 <h4 className="font-display font-bold text-base text-white">{appName}</h4>
                 <p className="text-xs text-teal-400 font-mono mt-0.5">Screenshot coming soon</p>
                 <p className="text-[11px] text-slate-400 mt-1 max-w-xs">
-                  Embedded Android OS powering smart strength &amp; cardio machines
+                  {portfolioData.uiText.consolePlaceholder}
                 </p>
               </div>
             )}
@@ -150,7 +151,7 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
                 <span className="text-slate-400 text-[11px]">· {appCompany}</span>
               </div>
               <span className="text-[10px] font-mono text-teal-300 px-2 py-0.5 rounded bg-teal-950/80 border border-teal-800/40">
-                Embedded Console
+                {portfolioData.uiText.consoleTag}
               </span>
             </div>
           </div>

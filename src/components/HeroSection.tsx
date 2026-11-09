@@ -13,32 +13,13 @@ export const HeroSection: React.FC = () => {
   const { personalInfo, metrics, projects } = portfolioData;
 
   // Cycle through featured projects on hero device frame (incorporating console and phone)
-  const heroScreenshots = [
-    {
-      image: projects[0].screenshots[0] || '',
-      name: projects[0].name,
-      company: projects[0].company,
-      deviceType: projects[0].deviceType,
-    },
-    {
-      image: projects[1].screenshots[0] || '',
-      name: projects[1].name,
-      company: projects[1].company,
-      deviceType: projects[1].deviceType,
-    },
-    {
-      image: projects[2].screenshots[0] || '',
-      name: projects[2].name,
-      company: projects[2].company,
-      deviceType: projects[2].deviceType,
-    },
-    {
-      image: projects[3].screenshots[0] || '',
-      name: projects[3].name,
-      company: projects[3].company,
-      deviceType: projects[3].deviceType,
-    },
-  ];
+  // First 4 projects, in the data file's order (most recent first)
+  const heroScreenshots = projects.slice(0, 4).map((p) => ({
+    image: p.screenshots[0] || '',
+    name: p.name,
+    company: p.company,
+    deviceType: p.deviceType,
+  }));
 
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
 
@@ -155,13 +136,12 @@ export const HeroSection: React.FC = () => {
             {/* Quick tech chip summary */}
             <div className="mt-8 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <span className="font-medium text-slate-700 dark:text-slate-300">Core Focus:</span>
-              <span>Clean Architecture</span>
-              <span aria-hidden="true">·</span>
-              <span>Kotlin &amp; Jetpack Compose</span>
-              <span aria-hidden="true">·</span>
-              <span>20M+ MAU Delivery</span>
-              <span aria-hidden="true">·</span>
-              <span>CSM® &amp; CSPO®</span>
+              {personalInfo.coreFocus.map((item, i) => (
+                <React.Fragment key={item}>
+                  {i > 0 && <span aria-hidden="true">·</span>}
+                  <span>{item}</span>
+                </React.Fragment>
+              ))}
             </div>
           </div>
 

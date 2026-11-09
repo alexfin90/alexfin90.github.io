@@ -40,7 +40,7 @@ export const ExperienceTimeline: React.FC = () => {
             const isExpanded = expandedIndices.includes(index);
 
             return (
-              <div key={entry.company} className="relative group">
+              <div key={entry.company} id={`exp-${entry.company.split(' ')[0].toLowerCase()}`} className="relative group scroll-mt-24">
                 {/* Node circle on timeline line */}
                 <div
                   className={`absolute -left-[31px] sm:-left-[39px] top-1.5 h-4 w-4 rounded-full border-2 transition-colors ${
@@ -90,6 +90,9 @@ export const ExperienceTimeline: React.FC = () => {
                       <div className="text-sm font-medium text-teal-700 dark:text-teal-300 mt-1">
                         {entry.role}
                       </div>
+                      {entry.roleDetail && (
+                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{entry.roleDetail}</div>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-3 self-end sm:self-center">

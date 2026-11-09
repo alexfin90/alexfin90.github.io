@@ -7,6 +7,9 @@
  * Decoupled data model ready for export or Kotlin Multiplatform migration.
  */
 
+// Single source for the Technogym role (timeline, project card, detail view, logcat).
+export const technogymRole = "Senior Android Engineer & Design System Lead";
+
 export interface Metric {
   label: string;
   value: string;
@@ -25,7 +28,7 @@ export interface Project {
   clientContext: string; // e.g. "Work done at TIM", "Built at Deloitte Digital for Lamborghini"
   company: string;
   period: string;
-  category: 'Telecom' | 'Fintech' | 'Automotive' | 'Utilities' | 'Embedded';
+  category: 'Telecom' | 'Fintech' | 'Automotive' | 'Utilities' | 'Connected Fitness';
   summary: string;
   story: ProjectStory;
   bulletPoints: string[];
@@ -38,6 +41,7 @@ export interface Project {
 export interface TimelineEntry {
   company: string;
   role: string;
+  roleDetail?: string; // optional second line under the role
   period: string;
   location: string;
   companyUrl: string;
@@ -79,12 +83,22 @@ export interface PersonalInfo {
   github: string;
   profilePhoto: string;
   about: string[];
+  coreFocus: string[];
 }
 
 export interface BeyondMobileItem {
   title: string;
   proof: string;
   targetId: string; // section or element id to scroll to
+}
+
+export interface UiText {
+  workSubtitle: string;
+  consoleDeviceLabel: string;
+  consoleStatusLabel: string;
+  consoleTag: string;
+  consolePlaceholder: string;
+  logcatTechnogym: string;
 }
 
 export interface PortfolioConfig {
@@ -114,13 +128,14 @@ export const portfolioData: {
     period: string;
     institutionUrl: string;
   }[];
+  uiText: UiText;
   config: PortfolioConfig;
 } = {
   personalInfo: {
     name: "Alessandro Finocchiaro",
     title: "Senior Android Engineer & Tech Lead",
     tagline: "Mobile tech lead with end-to-end digital experience: apps, CMS, analytics, CRM, cloud and payments.",
-    summary: "Senior Android Engineer and Tech Lead with 10+ years architecting and delivering high-scale consumer mobile applications for 100M+ active users across telecom, fintech, automotive, utilities, and embedded systems.",
+    summary: "Senior Android Engineer and Tech Lead with 10+ years architecting and delivering high-scale consumer mobile applications for 100M+ active users across telecom, fintech, automotive, utilities, and connected fitness.",
     email: "alexfinocchiaro90@gmail.com",
     linkedin: "https://www.linkedin.com/in/alexfinocchiaro",
     github: "https://github.com/alexfin90",
@@ -131,7 +146,8 @@ export const portfolioData: {
       "I like clean, testable code that is easy to change. I follow new technology closely, but I adopt it only when it makes the product better.",
       "I'm also passionate about finance and blockchain. I follow how money and technology meet, from mobile payments to DeFi, and it's part of why I enjoyed building TIM Pay.",
       "Outside work, you'll find me at the gym, following motorsport, or traveling."
-    ]
+    ],
+    coreFocus: ["Clean Architecture", "Kotlin & Jetpack Compose", "AI-augmented development", "20M+ MAU Delivery", "CSM® & CSPO®"]
   },
 
   metrics: [
@@ -152,9 +168,37 @@ export const portfolioData: {
     }
   ],
 
-  projectCategories: ['All', 'Telecom', 'Fintech', 'Embedded', 'Automotive', 'Utilities'],
+  projectCategories: ['All', 'Connected Fitness', 'Telecom', 'Fintech', 'Automotive', 'Utilities'],
 
   projects: [
+    {
+      id: "technogym",
+      name: "Biostrength & Biocircuit",
+      clientContext: `${technogymRole} at Technogym`,
+      company: "Technogym",
+      period: "May 2024 – Present",
+      category: "Connected Fitness",
+      summary: "Android platform powering Technogym's AI-driven strength machines, used in premium fitness facilities worldwide.",
+      story: {
+        problem: "Several legacy applications ran on the machines, each with its own architecture and maintenance cost.",
+        whatIDid: "Unified them into a single mono-app with Clean Architecture and a progressive Jetpack Compose migration, and refactored internal libraries with Kotlin Flow for real-time sensor data.",
+        result: "Maintenance overhead down by ~50%, plus more reliable sensor data for real-time biodata processing in AI-driven workouts."
+      },
+      bulletPoints: [
+        "Leading the architectural modernization of the Android platform powering Technogym's AI-driven strength machines (Biostrength, Biocircuit).",
+        "Unified multiple legacy applications into a single mono-app under a Clean Architecture redesign with progressive Jetpack Compose migration, reducing maintenance overhead by ~50%.",
+        "Refactored internal libraries using Kotlin Flow and reactive patterns, improving sensor data reliability and enabling real-time biodata processing for AI-driven workouts.",
+        "Architected a shared atomic design system used by 4 teams across 4 product touchpoints, accelerating feature development by ~50%.",
+        "Implemented GitHub Actions CI/CD with device-based robotic testing and centralized Gradle convention plugins across 8+ product lines, cutting release cycles by ~35%."
+      ],
+      techStack: ["Kotlin", "Flow", "Coroutines", "Jetpack Compose", "Clean Architecture", "Android SDK/NDK", "GitHub Actions", "Gradle conventions", "Android Media3"],
+      publicUrl: "https://www.technogym.com/en-INT/biostrength/",
+      deviceType: "console",
+      screenshots: [
+        "/assets/projects/technogym_2.webp",
+        "/assets/projects/technogym_1.webp"
+      ]
+    },
     {
       id: "mytim",
       name: "MyTIM",
@@ -212,34 +256,6 @@ export const portfolioData: {
         "/assets/projects/timpay_4.webp",
         "/assets/projects/timpay_5.webp",
         "/assets/projects/timpay_6.webp"
-      ]
-    },
-    {
-      id: "technogym",
-      name: "Biostrength & Biocircuit",
-      clientContext: "At Technogym",
-      company: "Technogym",
-      period: "May 2024 – Present",
-      category: "Embedded",
-      summary: "Embedded Android OS powering Technogym's AI-driven strength machines, used in premium fitness facilities worldwide.",
-      story: {
-        problem: "Several legacy applications ran on the machines, each with its own architecture and maintenance cost.",
-        whatIDid: "Unified them into a single mono-app with Clean Architecture and a progressive Jetpack Compose migration, and refactored internal libraries with Kotlin Flow for real-time sensor data.",
-        result: "Maintenance overhead down by ~50%, plus more reliable sensor data for real-time biodata processing in AI-driven workouts."
-      },
-      bulletPoints: [
-        "Leading the architectural modernization of the embedded Android OS powering Technogym's AI-driven strength machines (Biostrength, Biocircuit).",
-        "Unified multiple legacy applications into a single mono-app under a Clean Architecture redesign with progressive Jetpack Compose migration, reducing maintenance overhead by ~50%.",
-        "Refactored internal libraries using Kotlin Flow and reactive patterns, improving sensor data reliability and enabling real-time biodata processing for AI-driven workouts.",
-        "Architected a shared atomic design system across Cardio and Strength teams, accelerating feature development by ~50%.",
-        "Implemented GitHub Actions CI/CD with device-based robotic testing and centralized Gradle convention plugins across 8+ product lines, cutting release cycles by ~35%."
-      ],
-      techStack: ["Kotlin", "Flow", "Coroutines", "Jetpack Compose", "Clean Architecture", "Android SDK/NDK", "GitHub Actions", "Gradle conventions", "Android Media3"],
-      publicUrl: "https://www.technogym.com/en-INT/biostrength/",
-      deviceType: "console",
-      screenshots: [
-        "/assets/projects/technogym_2.webp",
-        "/assets/projects/technogym_1.webp"
       ]
     },
     {
@@ -325,17 +341,19 @@ export const portfolioData: {
   timeline: [
     {
       company: "Technogym",
-      role: "Senior Android Engineer, Strength Team (Biostrength & Biocircuit)",
+      role: technogymRole,
+      roleDetail: "Shared Android libraries and platform",
       period: "May 2024 – Present",
       location: "Remote, Italy",
       companyUrl: "https://www.linkedin.com/company/technogym/",
-      summary: "Leading architectural modernization of embedded Android OS powering AI-driven strength machines deployed in premium fitness facilities globally.",
+      summary: "Leading architectural modernization of the Android platform powering AI-driven strength machines deployed in premium fitness facilities globally.",
       achievements: [
         "Unified multiple legacy applications into a single mono-app under Clean Architecture redesign with progressive Jetpack Compose migration, reducing maintenance overhead by ~50%.",
+        "Maintain the shared Android libraries, Gradle convention plugins and build setup used by all product teams, across 8+ product lines. This work keeps every app consistent and makes the other teams faster.",
         "Refactored internal libraries using Kotlin Flow and reactive patterns, improving sensor data reliability and enabling real-time biodata processing for AI-driven workouts.",
-        "Architected a shared atomic design system across Cardio and Strength teams, accelerating feature development by ~50% and ensuring brand alignment.",
+        "Lead the technical development of the shared Jetpack Compose design system, used by 4 teams across 4 product touchpoints and around 10 apps, accelerating feature development by ~50%.",
         "Implemented GitHub Actions CI/CD with device-based robotic testing and centralized Gradle convention plugins across 8+ product lines, cutting release cycles by ~35%.",
-        "Supported team Agile transformation using CSM/CSPO expertise, optimizing sprint ceremonies and backlog refinement to deliver AI-enabled features 25% faster. Integrated AI tools (Claude Code, Cursor, Copilot) into team workflows."
+        "Supported team Agile transformation using CSM/CSPO expertise, optimizing sprint ceremonies and backlog refinement to deliver AI-enabled features 25% faster. Brought AI-augmented development into the team's daily workflow with Claude Code, Cursor, GitHub Copilot and Antigravity. I use coding agents for most daily tasks, from refactoring to tests and code review, and I choose when they help and when to do it by hand."
       ],
       techStack: ["Kotlin", "Flow", "Coroutines", "Jetpack Compose", "Clean Architecture", "Android SDK/NDK", "GitHub Actions", "Gradle Conventions", "Android Media3"]
     },
@@ -460,6 +478,7 @@ export const portfolioData: {
         { name: "Cursor", projectIds: ["technogym"] },
         { name: "GitHub Copilot", projectIds: ["technogym"] },
         { name: "Antigravity", projectIds: ["technogym"] },
+        { name: "Coding agents & agentic workflows", projectIds: ["technogym"] },
         { name: "AI-Enabled Feature Acceleration", projectIds: ["technogym"] }
       ]
     }
@@ -476,6 +495,7 @@ export const portfolioData: {
 
   beyondMobileIntro: "Mobile is my core. These are the pieces around it that I have worked with.",
   beyondMobile: [
+    { title: "AI-augmented development", proof: "Coding agents in most of my daily work with Claude Code, Cursor, GitHub Copilot and Antigravity, always with human review.", targetId: "exp-technogym" },
     { title: "Payments & security", proof: "Built PSD2 Strong Customer Authentication from scratch for TIM Pay.", targetId: "work" },
     { title: "Finance & fintech", proof: "Built TIM Pay with Hype and Banca Sella, including PSD2 authentication. Personal interest in finance, blockchain and DeFi.", targetId: "work" },
     { title: "CMS & content", proof: "Integrated Adobe AEM content into the TIM apps, and built CMS-driven apps for E.ON.", targetId: "work" },
@@ -532,6 +552,15 @@ export const portfolioData: {
       institutionUrl: "https://www.unict.it/"
     }
   ],
+
+  uiText: {
+    workSubtitle: "Scroll through featured applications. The frame switches between a smartphone and a gym machine console.",
+    consoleDeviceLabel: "Connected Fitness Console",
+    consoleStatusLabel: "Android on equipment",
+    consoleTag: "Connected Fitness",
+    consolePlaceholder: "Android platform powering smart strength machines",
+    logcatTechnogym: `${technogymRole}: shared Jetpack Compose design system used by 4 teams across 4 product touchpoints.`
+  },
 
   config: {
     // Turn on only after formEndpoint has a real Formspree ID.

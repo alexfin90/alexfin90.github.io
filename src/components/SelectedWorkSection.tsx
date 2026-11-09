@@ -65,7 +65,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
               Production Applications
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-              Scroll through featured applications. The frame automatically morphs between native smartphone and embedded gym machine console.
+              {portfolioData.uiText.workSubtitle}
             </p>
           </div>
 
@@ -227,7 +227,7 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
               />
               <div className="mt-3 text-center">
                 <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Target: <strong className="text-slate-800 dark:text-slate-200">{activeProject.name}</strong> ({activeProject.deviceType === 'console' ? 'Embedded Console Display' : 'Android Smartphone'})
+                  Target: <strong className="text-slate-800 dark:text-slate-200">{activeProject.name}</strong> ({activeProject.deviceType === 'console' ? portfolioData.uiText.consoleDeviceLabel : 'Android Smartphone'})
                 </span>
               </div>
             </div>

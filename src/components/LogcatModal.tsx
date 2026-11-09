@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { portfolioData } from '../data/portfolioData';
 import { Terminal, X, Copy, Check, Trash2 } from 'lucide-react';
 
 interface LogcatModalProps {
@@ -28,7 +29,7 @@ export const LogcatModal: React.FC<LogcatModalProps> = ({ isOpen, onClose }) => 
     { time: '10:24:00.104', pid: '2048-2048', level: 'I', tag: 'System.out', message: '=== Android Runtime: Alessandro Finocchiaro Portfolio ===' },
     { time: '10:24:00.120', pid: '2048-2052', level: 'D', tag: 'Architecture', message: 'Clean Architecture initialized: Domain, Data, Presentation layers separated.' },
     { time: '10:24:00.142', pid: '2048-2052', level: 'I', tag: 'CareerMetrics', message: 'scale_users: 100M+ active users | MAU_owned: 20M+ | years_exp: 10+' },
-    { time: '10:24:00.180', pid: '2048-2060', level: 'D', tag: 'JetpackCompose', message: 'Atomic design system instantiated across Cardio & Strength platforms.' },
+    { time: '10:24:00.180', pid: '2048-2060', level: 'D', tag: 'JetpackCompose', message: portfolioData.uiText.logcatTechnogym },
     { time: '10:24:00.210', pid: '2048-2060', level: 'I', tag: 'TechnogymOS', message: 'Real-time sensor biodata pipeline active: Kotlin Flow & Coroutines.' },
     { time: '10:24:00.250', pid: '2048-2070', level: 'I', tag: 'TIM_MyTIM', message: 'Internalization complete: reduced critical bugs by ~30%, 99.5% uptime SLA achieved.' },
     { time: '10:24:00.290', pid: '2048-2070', level: 'I', tag: 'TIM_Pay', message: 'PSD2 SCA from scratch: biometric + push 2FA with dynamic transaction linking.' },
