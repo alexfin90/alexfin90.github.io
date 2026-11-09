@@ -229,9 +229,6 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ highli
                 <span className="text-xs text-slate-500 dark:text-slate-400">
                   Target: <strong className="text-slate-800 dark:text-slate-200">{activeProject.name}</strong> ({activeProject.deviceType === 'console' ? 'Embedded Console Display' : 'Android Smartphone'})
                 </span>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  Frame morphs smoothly between smartphone and gym machine touchscreen
-                </p>
               </div>
             </div>
           </div>

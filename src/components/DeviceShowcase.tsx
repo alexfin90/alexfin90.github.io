@@ -23,8 +23,9 @@ export const DeviceShowcase: React.FC<DeviceShowcaseProps> = ({
   appCompany,
   isHero = false,
 }) => {
+  // min-h = PhoneFrame outer height (550+16 / 600+32), so switching to the shorter console doesn't shrink the layout.
   return (
-    <div className="relative w-full flex items-center justify-center min-h-[380px] sm:min-h-[600px] overflow-visible">
+    <div className="relative w-full flex items-center justify-center min-h-[566px] sm:min-h-[632px] overflow-visible">
       <AnimatePresence mode="wait">
         {deviceType === 'console' ? (
           <motion.div

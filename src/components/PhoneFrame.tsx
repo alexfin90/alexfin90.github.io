@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Wifi, BatteryMedium, Signal, Smartphone, Image as ImageIcon } from 'lucide-react';
 
@@ -21,12 +21,17 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
   isHero = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // Track which src finished loading, so a cached image that fires onLoad early can't be reset to hidden.
+  const [loadedSrc, setLoadedSrc] = useState<string>();
+  const imageLoaded = loadedSrc === currentImage;
+  // A cached image can finish before React sees its load event, so also check on mount.
+  const markIfComplete = useCallback(
+    (el: HTMLImageElement | null) => {
+      if (el?.complete && el.naturalWidth > 0) setLoadedSrc(currentImage);
+    },
+    [currentImage],
+  );
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [currentImage]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -110,7 +115,8 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({
                 key={currentImage}
                 src={currentImage}
                 alt={`${appName} preview screenshot`}
-                onLoad={() => setImageLoaded(true)}
+                ref={markIfComplete}
+                onLoad={() => setLoadedSrc(currentImage)}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: imageLoaded ? 1 : 0, scale: 1 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}

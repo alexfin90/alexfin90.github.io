@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Bluetooth, Wifi, Heart, Dumbbell } from 'lucide-react';
 
@@ -21,12 +21,17 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
   isHero = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // Track which src finished loading, so a cached image that fires onLoad early can't be reset to hidden.
+  const [loadedSrc, setLoadedSrc] = useState<string>();
+  const imageLoaded = loadedSrc === currentImage;
+  // A cached image can finish before React sees its load event, so also check on mount.
+  const markIfComplete = useCallback(
+    (el: HTMLImageElement | null) => {
+      if (el?.complete && el.naturalWidth > 0) setLoadedSrc(currentImage);
+    },
+    [currentImage],
+  );
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-
-  useEffect(() => {
-    setImageLoaded(false);
-  }, [currentImage]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -118,7 +123,8 @@ export const ConsoleFrame: React.FC<ConsoleFrameProps> = ({
                 <img
                   src={currentImage}
                   alt={`${appName} console interface`}
-                  onLoad={() => setImageLoaded(true)}
+                  ref={markIfComplete}
+                  onLoad={() => setLoadedSrc(currentImage)}
                   className="h-full w-full object-cover object-center"
                   loading={isHero ? 'eager' : 'lazy'}
                 />
