@@ -55,6 +55,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
+      id: 'case-studies',
+      label: 'Jump to Case Studies',
+      section: 'Navigation',
+      icon: Briefcase,
+      action: () => {
+        document.getElementById('case-studies')?.scrollIntoView({ behavior: 'smooth' });
+        onClose();
+      },
+    },
+    {
       id: 'skills',
       label: 'Jump to Skills Matrix',
       section: 'Navigation',

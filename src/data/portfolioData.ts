@@ -86,6 +86,17 @@ export interface PersonalInfo {
   coreFocus: string[];
 }
 
+export interface CaseStudy {
+  title: string;
+  company: string;
+  period: string;
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+  tags: string[];
+}
+
 export interface BeyondMobileItem {
   title: string;
   proof: string;
@@ -118,6 +129,7 @@ export const portfolioData: {
   timeline: TimelineEntry[];
   skills: SkillCategory[];
   openSource: OpenSourceRepo[];
+  caseStudies: CaseStudy[];
   beyondMobileIntro: string;
   beyondMobile: BeyondMobileItem[];
   certifications: Certification[];
@@ -490,6 +502,39 @@ export const portfolioData: {
       description: "Real-time stock price tracker: WebSocket feed, 100% Jetpack Compose, MVVM + Clean Architecture, multi-module Gradle with convention plugins, Kotlin Flow, Hilt, unit and Compose UI tests.",
       tech: ["Kotlin", "Jetpack Compose", "Flow", "Hilt", "Clean Architecture"],
       url: "https://github.com/alexfin90/StocksTracker"
+    }
+  ],
+
+  caseStudies: [
+    {
+      title: "PSD2 authentication for a fintech app",
+      company: "TIM Pay, TIM",
+      period: "2019 – 2024",
+      situation: "I was the only Android developer on TIM Pay, a fintech app co-branded with Hype and Banca Sella: card payments, transfers, crypto. One iOS contractor, no dedicated backend team on our side.",
+      task: "Build PSD2 Strong Customer Authentication from scratch, against a legal deadline. Every payment needed two independent factors, and each challenge had to be linked to the exact amount and recipient.",
+      action: "I designed the whole flow: biometrics as the primary factor, push notification as the second, SMS OTP as fallback. I built the logic that ties each challenge to its transaction, so a captured challenge cannot be replayed on another payment, and spent a lot of time on edge cases (expired sessions, broken fallbacks, fraud attempts) before rollout.",
+      result: "Shipped on time and fully compliant. The flow became the security backbone of an app with 500K+ downloads and a 4.6 rating on the Play Store.",
+      tags: ["Fintech", "Security", "PSD2", "Android"]
+    },
+    {
+      title: "Bringing MyTIM in-house",
+      company: "MyTIM, TIM",
+      period: "2019 – 2024",
+      situation: "MyTIM, the main app of Italy's largest telecom operator (20M+ users), was built by an external consultancy, and TIM decided to bring it in-house.",
+      task: "Lead the transition: take full ownership of a large legacy codebase in 3-4 months, without stopping releases.",
+      action: "On the people side, I grew the internal squad to 4 Android and 3 iOS engineers, ran the technical interviews and paired new joiners with the outgoing team. On the code side, we moved to Kotlin and Clean Architecture module by module, never a big rewrite, and shipped a full UI restyling along the way.",
+      result: "No gap in releases. Load times in key areas cut roughly in half, critical bugs down about 30%, 99.5% uptime SLA kept throughout.",
+      tags: ["Leadership", "Hiring", "Kotlin", "Clean Architecture"]
+    },
+    {
+      title: "One design system for many apps",
+      company: "Technogym",
+      period: "May 2024 – Present",
+      situation: "Each team was building its own UI components, so the same button existed in several slightly different versions, with duplicated work and an inconsistent product.",
+      task: "Create one shared Compose design system that every team could adopt.",
+      action: "I built the shared library and the theming, and used Gradle convention plugins so every app stays on aligned versions. For adoption, I went team by team, starting with the components they were about to rebuild anyway, so using it saved them work from day one.",
+      result: "Used by 4 teams, 4 product touchpoints and ~10 apps; feature development is roughly 50% faster and the apps look like one product.",
+      tags: ["Jetpack Compose", "Design System", "Gradle"]
     }
   ],
 

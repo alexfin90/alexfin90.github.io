@@ -11,6 +11,7 @@ import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
 import { SelectedWorkSection } from './components/SelectedWorkSection';
 import { ExperienceTimeline } from './components/ExperienceTimeline';
+import { CaseStudiesSection } from './components/CaseStudiesSection';
 import { SkillsSection } from './components/SkillsSection';
 import { BeyondMobileSection } from './components/BeyondMobileSection';
 import { OpenSourceSection } from './components/OpenSourceSection';
@@ -48,6 +49,8 @@ export default function App() {
 
           {/* 4. Experience Timeline */}
           <ExperienceTimeline />
+
+          <CaseStudiesSection />
 
           {/* 5. Skills & Technology Matrix */}
           <SkillsSection

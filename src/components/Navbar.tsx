@@ -19,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
     { label: 'About', href: '#about' },
     { label: 'Work', href: '#work' },
     { label: 'Experience', href: '#experience' },
+    { label: 'Case studies', href: '#case-studies' },
     { label: 'Skills', href: '#skills' },
     // wideOnly: hidden in the desktop bar below xl, where it would crowd the row
     { label: 'Beyond mobile', href: '#beyond', wideOnly: true },
@@ -28,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/85 dark:bg-slate-950/85 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Zone 1: Brand Wordmark (Single text element) */}
         <a
           href="#"
@@ -39,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
         </a>
 
         {/* Zone 2: Concise single-line navigation links */}
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300">
           {navLinks.map((link) => (
             <a
               key={link.href}
