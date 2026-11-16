@@ -129,7 +129,7 @@ fun QaAutomationRoot(
 ) {
     Box(
         modifier = Modifier.semantics {
-            testTagsAsResourceId = TechnogymTestTagConfig.enabled
+            testTagsAsResourceId = TestTagConfig.enabled
         }
     ) {
         content()
