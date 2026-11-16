@@ -15,25 +15,42 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// The prerendered HTML is built with 'dark'. The real preference is applied before paint
+// by the inline script in index.html, and synced into React state after hydration,
+// so server and first client render always match.
+const readPreferredTheme = (): Theme => {
+  try {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+  } catch {
+    // Storage can be unavailable (privacy mode); fall back to the OS preference.
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme') as Theme | null;
-      if (saved) return saved;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    return 'dark';
-  });
+  const [theme, setThemeState] = useState<Theme>('dark');
+  const [synced, setSynced] = useState(false);
 
   useEffect(() => {
+    setThemeState(readPreferredTheme());
+    setSynced(true);
+  }, []);
+
+  useEffect(() => {
+    if (!synced) return;
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      // Ignore: the theme still applies for this visit.
+    }
+  }, [theme, synced]);
 
   const toggleTheme = () => {
     setThemeState(prev => (prev === 'dark' ? 'light' : 'dark'));

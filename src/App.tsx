@@ -15,6 +15,7 @@ import { CaseStudiesSection } from './components/CaseStudiesSection';
 import { SkillsSection } from './components/SkillsSection';
 import { BeyondMobileSection } from './components/BeyondMobileSection';
 import { OpenSourceSection } from './components/OpenSourceSection';
+import { WritingSection } from './components/WritingSection';
 import { CertificationsSection } from './components/CertificationsSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -63,6 +64,9 @@ export default function App() {
 
           {/* 6. Open Source Repositories */}
           <OpenSourceSection />
+
+          {/* Latest articles (hidden until one is published) */}
+          <WritingSection />
 
           {/* 7. Certifications & Education */}
           <CertificationsSection />

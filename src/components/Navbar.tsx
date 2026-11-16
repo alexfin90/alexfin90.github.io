@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Sun, Moon, Search, Menu, X } from 'lucide-react';
+import articles from 'virtual:articles';
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
@@ -24,6 +25,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCommandPalette }) => {
     // wideOnly: hidden in the desktop bar below xl, where it would crowd the row
     { label: 'Beyond mobile', href: '#beyond', wideOnly: true },
     { label: 'Certifications', href: '#certifications' },
+    // Shown only once at least one article is published.
+    ...(articles.length > 0 ? [{ label: 'Writing', href: '/articles/' }] : []),
     { label: 'Contact', href: '#contact' },
   ];
 
