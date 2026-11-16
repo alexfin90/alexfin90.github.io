@@ -14,6 +14,9 @@ export interface ArticleMeta {
   issue?: number;
   tags: string[];
   originalUrl?: string;
+  /** Site path of the cover image, e.g. /articles/<slug>/cover.jpg */
+  cover?: string;
+  coverAlt?: string;
   draft: boolean;
 }
 
@@ -22,6 +25,8 @@ export interface Article extends ArticleMeta {
 }
 
 export const ARTICLES_DIR = path.resolve(import.meta.dirname, '..', 'content', 'articles');
+/** Images for an article live in public/articles/<slug>/ and are served at /articles/<slug>/. */
+export const ARTICLE_ASSETS_DIR = path.resolve(import.meta.dirname, '..', 'public', 'articles');
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -88,6 +93,21 @@ export const loadArticles = (withDrafts = includeDrafts()): Article[] => {
     } else if (!DATE_RE.test(date)) {
       date = new Date().toISOString().slice(0, 10); // drafts preview with today's date
     }
+    let cover: string | undefined;
+    const coverFile = str(data.cover);
+    if (coverFile) {
+      if (coverFile.includes('/') || coverFile.includes('\\')) {
+        throw new Error(`${name}: "cover" must be just a file name, like cover.jpg, placed in public/articles/${slug}/`);
+      }
+      if (!fs.existsSync(path.join(ARTICLE_ASSETS_DIR, slug, coverFile))) {
+        throw new Error(`${name}: cover image not found at public/articles/${slug}/${coverFile}`);
+      }
+      cover = `/articles/${slug}/${coverFile}`;
+    }
+    const coverAlt = str(data.coverAlt) || undefined;
+    if (cover && !coverAlt && !draft) {
+      throw new Error(`${name}: "coverAlt" (a short description of the cover image) is required when "cover" is set`);
+    }
     const issue = str(data.issue) ? Number(str(data.issue)) : undefined;
     articles.push({
       slug,
@@ -98,6 +118,8 @@ export const loadArticles = (withDrafts = includeDrafts()): Article[] => {
       issue: Number.isFinite(issue) ? issue : undefined,
       tags: Array.isArray(data.tags) ? data.tags : str(data.tags) ? [str(data.tags)] : [],
       originalUrl: str(data.originalUrl) || undefined,
+      cover,
+      coverAlt,
       draft,
       body,
     });

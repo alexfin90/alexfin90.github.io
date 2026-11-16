@@ -54,8 +54,17 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({ article, html }) => {
           )}
         </header>
 
+        {article.cover && (
+          <img
+            src={article.cover}
+            alt={article.coverAlt ?? ''}
+            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 mb-10 aspect-[1200/630] object-cover"
+            fetchPriority="high"
+          />
+        )}
+
         <div
-          className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-display prose-a:text-teal-600 dark:prose-a:text-teal-400 prose-pre:p-0 prose-pre:bg-transparent prose-code:before:content-none prose-code:after:content-none"
+          className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-display prose-a:text-teal-600 dark:prose-a:text-teal-400 prose-pre:p-0 prose-pre:bg-transparent prose-code:before:content-none prose-code:after:content-none prose-img:rounded-xl"
           dangerouslySetInnerHTML={{ __html: html }}
         />
 

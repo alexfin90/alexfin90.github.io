@@ -51,11 +51,13 @@ interface PageOptions {
   jsonLd?: object;
   noindex?: boolean;
   extraHead?: string;
+  /** Site path of the preview image; defaults to the profile photo. */
+  image?: string;
 }
 
 const page = (o: PageOptions): string => {
   const url = SITE_URL + o.pathname;
-  const image = SITE_URL + ssr.siteInfo.photo;
+  const image = SITE_URL + (o.image ?? ssr.siteInfo.photo);
   return `<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
@@ -70,7 +72,8 @@ const page = (o: PageOptions): string => {
     <meta property="og:type" content="${o.ogType ?? 'website'}" />
     <meta property="og:url" content="${url}" />
     <meta property="og:image" content="${image}" />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="${o.image ? 'summary_large_image' : 'summary'}" />
+    <meta name="twitter:image" content="${image}" />
     <meta name="twitter:title" content="${escapeHtml(o.title)}" />
     <meta name="twitter:description" content="${escapeHtml(o.description)}" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -96,9 +99,17 @@ const LANGS = ['kotlin', 'java', 'xml', 'groovy', 'json', 'yaml', 'bash', 'shell
 const highlighter = await createHighlighter({ themes: ['github-light', 'github-dark'], langs: LANGS });
 const loaded = new Set(highlighter.getLoadedLanguages());
 
+// Set per article before parsing, so relative image paths resolve to /articles/<slug>/.
+let currentSlug = '';
+
 const marked = new Marked({
   gfm: true,
   renderer: {
+    image({ href, title, text }) {
+      const src = /^(https?:)?\/\//.test(href) || href.startsWith('/') ? href : `/articles/${currentSlug}/${href.replace(/^\.\//, '')}`;
+      const t = title ? ` title="${escapeHtml(title)}"` : '';
+      return `<img src="${escapeHtml(src)}" alt="${escapeHtml(text)}"${t} loading="lazy" />`;
+    },
     code({ text, lang }) {
       const requested = (lang ?? '').split(/\s/)[0].toLowerCase();
       const alias: Record<string, string> = { kt: 'kotlin', kts: 'kotlin', gradle: 'groovy', sh: 'bash', ts: 'typescript', js: 'javascript' };
@@ -117,6 +128,7 @@ const metas = articles.map(toMeta);
 const author = { '@type': 'Person', name: ssr.siteInfo.name, url: SITE_URL + '/' };
 
 for (const article of articles) {
+  currentSlug = article.slug;
   const html = await marked.parse(article.body);
   const pathname = `/articles/${article.slug}/`;
   write(
@@ -126,6 +138,7 @@ for (const article of articles) {
       description: article.description,
       pathname,
       ogType: 'article',
+      image: article.cover,
       noindex: article.draft,
       extraHead: `<meta property="article:published_time" content="${article.date}" />`,
       jsonLd: {
@@ -136,6 +149,7 @@ for (const article of articles) {
         datePublished: article.date,
         author,
         mainEntityOfPage: SITE_URL + pathname,
+        ...(article.cover ? { image: SITE_URL + article.cover } : {}),
         ...(article.tags.length ? { keywords: article.tags.join(', ') } : {}),
       },
       body: ssr.renderArticle(toMeta(article), html),

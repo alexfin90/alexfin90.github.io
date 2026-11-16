@@ -8,6 +8,8 @@ declare module 'virtual:articles' {
     issue?: number;
     tags: string[];
     originalUrl?: string;
+    cover?: string;
+    coverAlt?: string;
     draft: boolean;
   }
   const articles: ArticleMeta[];
