@@ -73,6 +73,9 @@ const page = (o: PageOptions): string => {
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="${escapeHtml(o.title)}" />
     <meta name="twitter:description" content="${escapeHtml(o.description)}" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title="${escapeHtml(ssr.siteInfo.name)}: Engineering notes" href="/feed.xml" />
     ${o.extraHead ?? ''}
     ${o.jsonLd ? `<script type="application/ld+json">${JSON.stringify(o.jsonLd)}</script>` : ''}
