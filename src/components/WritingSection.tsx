@@ -37,6 +37,14 @@ export const WritingSection: React.FC = () => {
               href={`/articles/${a.slug}/`}
               className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-sm hover:border-teal-500/40 transition-colors flex flex-col"
             >
+              {a.cover && (
+                <img
+                  src={a.cover}
+                  alt={a.coverAlt ?? ''}
+                  loading="lazy"
+                  className="w-full aspect-[1200/630] object-cover rounded-xl mb-4 border border-slate-200 dark:border-slate-800"
+                />
+              )}
               <span className="text-xs text-slate-500 dark:text-slate-400">
                 <time dateTime={a.date}>{formatDate(a.date)}</time>
                 {a.issue !== undefined && ` · #${a.issue}`}
