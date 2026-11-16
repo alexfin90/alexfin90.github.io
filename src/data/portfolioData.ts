@@ -82,6 +82,7 @@ export interface PersonalInfo {
   linkedin: string;
   github: string;
   profilePhoto: string;
+  cvUrl: string;
   about: string[];
   coreFocus: string[];
 }
@@ -152,6 +153,7 @@ export const portfolioData: {
     linkedin: "https://www.linkedin.com/in/alexfinocchiaro",
     github: "https://github.com/alexfin90",
     profilePhoto: "/assets/profile/alessandro-finocchiaro.jpg",
+    cvUrl: "/Alessandro-Finocchiaro-CV.pdf",
     about: [
       "I wrote my first lines of code when I was six. That curiosity never left me. It took me to a Master's degree in Computer Engineering, and then to more than ten years of building apps used by millions of people.",
       "Life has not always been easy. Some hard moments taught me resilience, patience and how to keep going when things get tough. I bring that into my work: I stay calm under pressure, and I care about the people around me.",

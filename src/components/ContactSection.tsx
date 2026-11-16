@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData } from '../data/portfolioData';
-import { Send, Mail, Linkedin, Github, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Send, Mail, Linkedin, Github, CheckCircle, AlertCircle, Loader2, FileDown } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
   const { personalInfo, config } = portfolioData;
@@ -198,6 +198,21 @@ export const ContactSection: React.FC = () => {
                     <span className="text-xs text-slate-500 dark:text-slate-400">
                       @alexfin90
                     </span>
+                  </div>
+                </a>
+
+                {/* CV download */}
+                <a
+                  href={personalInfo.cvUrl}
+                  download
+                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-950/30 border border-slate-200/80 dark:border-slate-700/60 transition-colors group"
+                >
+                  <div className="p-2 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform">
+                    <FileDown className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-semibold text-slate-900 dark:text-white block">Curriculum Vitae</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">PDF · English · 2 pages</span>
                   </div>
                 </a>
               </div>

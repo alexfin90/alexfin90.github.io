@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { portfolioData } from '../data/portfolioData';
 import { DeviceShowcase } from './DeviceShowcase';
-import { ArrowDown, Send, Github, Linkedin, Monitor, Smartphone } from 'lucide-react';
+import { ArrowDown, Send, Github, Linkedin, Monitor, Smartphone, FileDown } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   const { personalInfo, metrics, projects } = portfolioData;
@@ -108,6 +108,15 @@ export const HeroSection: React.FC = () => {
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Contact me</span>
+              </a>
+
+              <a
+                href={personalInfo.cvUrl}
+                download
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all hover:-translate-y-0.5"
+              >
+                <FileDown className="w-3.5 h-3.5" />
+                <span>Download CV</span>
               </a>
 
               <div className="flex items-center gap-2 sm:ml-2">
