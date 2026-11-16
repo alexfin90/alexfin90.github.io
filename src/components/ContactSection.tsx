@@ -6,7 +6,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData } from '../data/portfolioData';
-import confetti from 'canvas-confetti';
 import { Send, Mail, Linkedin, Github, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
@@ -100,6 +99,8 @@ export const ContactSection: React.FC = () => {
 
       if (response.ok) {
         setStatus('success');
+        // Loaded on demand: only needed after a successful send.
+        const { default: confetti } = await import('canvas-confetti');
         confetti({
           particleCount: 100,
           spread: 70,

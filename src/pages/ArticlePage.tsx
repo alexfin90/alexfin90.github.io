@@ -55,7 +55,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({ article, html }) => {
         </header>
 
         <div
-          className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-display prose-a:text-teal-600 dark:prose-a:text-teal-400 prose-pre:p-0 prose-pre:bg-transparent"
+          className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-display prose-a:text-teal-600 dark:prose-a:text-teal-400 prose-pre:p-0 prose-pre:bg-transparent prose-code:before:content-none prose-code:after:content-none"
           dangerouslySetInnerHTML={{ __html: html }}
         />
 
