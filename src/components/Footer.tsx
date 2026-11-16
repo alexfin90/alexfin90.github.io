@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { portfolioData } from '../data/portfolioData';
 import { Terminal, Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
 
@@ -13,6 +13,10 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenLogcat }) => {
   const { personalInfo } = portfolioData;
+  // Start from the build year so the prerendered HTML and the first client render match,
+  // then switch to the real year (matters only if the site is not rebuilt after New Year).
+  const [year, setYear] = useState(__BUILD_YEAR__);
+  useEffect(() => setYear(new Date().getFullYear()), []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -85,17 +89,22 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLogcat }) => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Clean Architecture Notice */}
+        {/* Bottom Bar: Copyright & how the site is built */}
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
           <div>
-            © {new Date().getFullYear()} {personalInfo.name}. All rights reserved.
+            © {year} {personalInfo.name}. All rights reserved.
           </div>
           <div className="flex items-center gap-2">
-            <span>Material 3 Expressive Architecture</span>
+            <span>Built with React, Tailwind and Vite</span>
             <span aria-hidden="true">·</span>
-            <span className="font-mono text-[11px] text-teal-600 dark:text-teal-400">
-              Clean Architecture Decoupled
-            </span>
+            <a
+              href="https://github.com/alexfin90/alexfin90.github.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[11px] text-teal-600 dark:text-teal-400 hover:underline"
+            >
+              Source on GitHub
+            </a>
           </div>
         </div>
       </div>

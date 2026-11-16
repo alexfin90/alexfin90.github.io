@@ -29,6 +29,9 @@ const articlesPlugin = (): Plugin => {
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss(), articlesPlugin()],
+    define: {
+      __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
+    },
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, '.'),
