@@ -58,7 +58,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({ article, html }) => {
           <img
             src={article.cover}
             alt={article.coverAlt ?? ''}
-            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 mb-10 aspect-[1200/630] object-cover"
+            className="w-full h-auto rounded-2xl border border-slate-200 dark:border-slate-800 mb-10"
             fetchPriority="high"
           />
         )}
