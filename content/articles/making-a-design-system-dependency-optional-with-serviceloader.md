@@ -1,14 +1,12 @@
 ---
 title: "How I Made a Design System Dependency Optional with ServiceLoader (Without Touching the Consumer Apps)"
 description: A blur library added 24.6 KB to every app using our Compose design system. Moving it into an optional module discovered with ServiceLoader made it opt-in with zero changes in consumer code.
-# TODO: publication date, YYYY-MM-DD
-date:
+date: 2026-11-21
 series: What Broke in Android - Engineering Notes
 issue: 6
 tags: [Jetpack Compose, Design System, Gradle, R8, Modularization]
 cover: cover.jpg
 coverAlt: "Make it optional: ServiceLoader turns a design system dependency into a plug-in module. A designsystem module with no blur dependency, an optional glass module discovered through ServiceLoader, and an app that turns blur on just by adding the module."
-draft: true
 ---
 
 ## Context
