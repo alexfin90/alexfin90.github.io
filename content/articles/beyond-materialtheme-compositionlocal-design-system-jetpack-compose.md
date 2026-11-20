@@ -5,8 +5,7 @@ date: 2026-07-31
 series: What Broke in Android - Engineering Notes
 issue: 4
 tags: [Jetpack Compose, Design System, CompositionLocal, Theming]
-# TODO: paste the LinkedIn URL of the Italian original
-originalUrl:
+originalUrl: https://www.linkedin.com/pulse/what-broke-android-engineering-notes-4-oltre-per-un-finocchiaro-7vtkf/
 translatedFrom: Italian
 cover: cover.jpg
 coverAlt: "Cover in Italian: Beyond MaterialTheme, using CompositionLocal to build a scalable design system in Jetpack Compose. A code snippet of AppDesignSystem and a fitness app built on its tokens."
