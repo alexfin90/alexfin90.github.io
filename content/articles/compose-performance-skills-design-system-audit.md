@@ -1,6 +1,6 @@
 ---
 title: How We Used Android’s Compose Performance Skills to Audit a Design System at Scale
-description: Using the official Jetpack Compose Performance skill as a shared checklist to audit a Compose design system, with phase deferral, fewer allocations and Modifier.Node where it really pays off.
+description: Using the official Jetpack Compose Performance skill to audit a Compose design system, migrating 27 modifiers to Modifier.Node, and measuring honestly what changed.
 date: 2026-11-29
 series: What Broke in Android - Engineering Notes
 issue: 7
@@ -259,9 +259,46 @@ Otherwise, keep the implementation simple.
 
 Performance work should not turn every abstraction into a more complex one.
 
+## The migration in practice
+
+In one pull request we migrated the last 27 public modifiers of the design system from `composed` to `ModifierNodeElement` + `Modifier.Node`: backgrounds, borders, shadows, overlays and click handling. It had to be non-breaking: every signature stayed a plain, non-composable `fun Modifier.xyz(...): Modifier` with the same defaults, and the four themes had to keep working with a runtime theme switch.
+
+Three modifiers stayed `composed` on purpose: the blur extensions, because they wrap a public plugin interface implemented in a separate module (I wrote about that design in [Engineering Notes #6](/articles/making-a-design-system-dependency-optional-with-serviceloader/)). Migrating them would have broken that module. “Not every modifier needs Node” also means “some modifiers can’t move yet”.
+
+## What the migration broke, and the tests that caught it
+
+The first version of the PR looked correct and compiled cleanly. Testing it properly found four problems:
+
+- **Stale theme after a runtime switch.** Five modifiers kept the previous theme’s colors. Our design system is provided through a `staticCompositionLocalOf`, and a read inside the cache block of a `CacheDrawModifierNode` is not observed. On a theme change the node only received `invalidateDraw()`, which does not clear the cache. The old `composed` version simply recomposed. The fix: resolve theme-dependent values in the draw callback, and cache only what does not depend on the theme.
+- **Inner shadow drawn on top of the content.** The new nodes drew the shadow after the content instead of before, unlike both the native inner shadow and the previous implementation.
+- **A crash at class initialization.** A top-level `val` called `ViewConfiguration` when the file’s class was loaded, and the existing gesture tests failed with `ExceptionInInitializerError`. It became a function.
+- **Delegation and drawing.** A `DelegatingNode` that implements `DrawModifierNode` does not get `draw()` called on its delegates. Easy to miss, now written down in the team guidelines.
+
+The test that caught the first problem renders each of the 27 theme-reading modifiers after every runtime switch between the four themes (12 transitions) and compares the result with a freshly created node. It was red before the fix and green after.
+
+## What we measured
+
+We compared the migrated library with the previous version in alternating A/B runs, on an emulator and on a real Android 14 device from our product line.
+
+**Creation cost** (composition, measure, layout and draw of freshly created nodes, median of 25 recreations per run, 5 alternating runs):
+
+| Scenario | Emulator | Real device |
+|---|---|---|
+| 300 boxes, each with four migrated modifiers | 116.7 → 83.9 ms (−28%) | 363.6 → 247.8 ms (−32%), ranges not overlapping |
+| 120 complete `TextButton`s | 233.2 → 217.8 ms (−6.6%), ranges overlapping | 847.1 → 833.5 ms (−1.6%), ranges overlapping |
+
+**Real screens** (release build with R8, frame stats and main-thread CPU): entering ten complex screens, scrolling, opening animated panels with blur and cycling themes all stayed within the noise, with frame percentiles from p50 to p99 unchanged.
+
+Two behaviour changes showed up:
+
+- **A press animation that now actually runs.** In the `composed` version, a conditional modifier appearing and disappearing earlier in the chain reset the state of the button’s glow animation, so the glow jumped in a single frame. With nodes it runs for the intended 200 ms. Pressing a button now produces more frames, but jank on that scenario dropped from 27% to 6% (p99 from 105 to 48 ms).
+- **One frame of delay on some presses.** On repeated presses of other controls, jank% went from 5.7% to 9.5%, while frame percentiles stayed the same (p50 17 ms, p99 22 to 23 ms). The spring animation now starts from a coroutine in the node instead of a composition effect, so it starts one frame later: one or two extra frames per press, right at the edge of the 16.7 ms budget.
+
+The honest reading: the gain is in the cost of creating modifiers, because nodes replace a sub-composition for every `composed` call. For complete components and at steady state, the effect is neutral. With this number of runs we cannot claim statistical significance on full screens, so the conclusion is **“no regressions”**, not “faster”.
+
 ## The impact on low-end devices
 
-This initiative was particularly relevant for hardware running older Android versions, including API 23 devices.
+This initiative was particularly relevant for hardware running older Android versions, including API 23 devices. The measurements above were taken on Android 14: the API 23 path is still to be verified on real hardware, and that is the next step.
 
 On those devices, the frame budget is less forgiving. A few extra allocations, unnecessary recompositions, or repeated layout work can make the difference between a smooth interaction and visible jank.
 
@@ -305,8 +342,9 @@ Here are the lessons I would carry into any Compose performance initiative:
 3. **Think in phases.** Composition, layout, and draw have different costs.
 4. **Treat allocations as a first-class concern.** Especially on low-end hardware.
 5. **Make performance rules visible.** A shared checklist beats tribal knowledge.
-6. **Measure before and after.** Recomposition count alone is not enough.
-7. **Favor repeatable decisions.** A good pattern is more valuable than a one-off optimization.
+6. **Measure before and after, and report what you find.** Recomposition count alone is not enough, and “no regressions” is a valid result.
+7. **Test the migration, not just the feature.** Our worst bugs (stale theme, wrong draw order) only showed up with dedicated tests.
+8. **Favor repeatable decisions.** A good pattern is more valuable than a one-off optimization.
 
 ## Final thought
 
