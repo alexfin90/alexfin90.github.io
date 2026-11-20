@@ -14,6 +14,7 @@ series: What Broke in Android - Engineering Notes   # optional
 issue: 5                    # optional
 tags: [Jetpack Compose, Testing]   # optional
 originalUrl: https://www.linkedin.com/pulse/...  # optional, link to the LinkedIn version
+translatedFrom: Italian      # optional, when this page translates the LinkedIn original
 cover: cover.jpg            # optional, file in public/articles/<slug>/
 coverAlt: Short description of the cover image   # required if cover is set
 draft: true                 # optional; drafts are not published

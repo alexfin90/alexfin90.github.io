@@ -8,6 +8,7 @@ declare module 'virtual:articles' {
     issue?: number;
     tags: string[];
     originalUrl?: string;
+    translatedFrom?: string;
     cover?: string;
     coverAlt?: string;
     draft: boolean;
