@@ -14,6 +14,8 @@ export interface ArticleMeta {
   issue?: number;
   tags: string[];
   originalUrl?: string;
+  /** Language of the original LinkedIn version when this page is a translation, e.g. "Italian". */
+  translatedFrom?: string;
   /** Site path of the cover image, e.g. /articles/<slug>/cover.jpg */
   cover?: string;
   coverAlt?: string;
@@ -118,6 +120,7 @@ export const loadArticles = (withDrafts = includeDrafts()): Article[] => {
       issue: Number.isFinite(issue) ? issue : undefined,
       tags: Array.isArray(data.tags) ? data.tags : str(data.tags) ? [str(data.tags)] : [],
       originalUrl: str(data.originalUrl) || undefined,
+      translatedFrom: str(data.translatedFrom) || undefined,
       cover,
       coverAlt,
       draft,

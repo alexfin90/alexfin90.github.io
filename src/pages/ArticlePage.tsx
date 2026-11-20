@@ -71,7 +71,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({ article, html }) => {
         <footer className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-300 space-y-3">
           {article.originalUrl && (
             <p>
-              Also published on{' '}
+              {article.translatedFrom ? `Originally published in ${article.translatedFrom} on ` : 'Also published on '}
               <a href={article.originalUrl} rel="noopener" className="text-teal-600 dark:text-teal-400 hover:underline">
                 LinkedIn
               </a>
