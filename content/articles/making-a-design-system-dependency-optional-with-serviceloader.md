@@ -6,9 +6,8 @@ date:
 series: What Broke in Android - Engineering Notes
 issue: 6
 tags: [Jetpack Compose, Design System, Gradle, R8, Modularization]
-# TODO: cover.jpg in public/articles/making-a-design-system-dependency-optional-with-serviceloader/, then uncomment
-# cover: cover.jpg
-# coverAlt: TODO
+cover: cover.jpg
+coverAlt: "Make it optional: ServiceLoader turns a design system dependency into a plug-in module. A designsystem module with no blur dependency, an optional glass module discovered through ServiceLoader, and an app that turns blur on just by adding the module."
 draft: true
 ---
 
