@@ -71,15 +71,15 @@ app
 
 ```kotlin
 interface BlurProvider {
-    @Composable fun Modifier.surfaceBlur(): Modifier
-    @Composable fun Modifier.surfaceBlurElevated(): Modifier
-    @Composable fun Modifier.surfaceBlurSource(): Modifier
+    @Composable fun Modifier.surfaceBlurSource(key: Any?, zIndex: Float): Modifier
+    @Composable fun Modifier.surfaceBlur(sourceKey: Any?, blurRadiusFraction: Float): Modifier
+    @Composable fun Modifier.surfaceBlurElevated(sourceKey: Any?, blurRadiusFraction: Float): Modifier
 }
 
 private object NoOpBlurProvider : BlurProvider {
-    @Composable override fun Modifier.surfaceBlur() = this
-    @Composable override fun Modifier.surfaceBlurElevated() = this
-    @Composable override fun Modifier.surfaceBlurSource() = this
+    @Composable override fun Modifier.surfaceBlurSource(key: Any?, zIndex: Float) = this
+    @Composable override fun Modifier.surfaceBlur(sourceKey: Any?, blurRadiusFraction: Float) = this
+    @Composable override fun Modifier.surfaceBlurElevated(sourceKey: Any?, blurRadiusFraction: Float) = this
 }
 
 private val blurProvider: BlurProvider by lazy {
@@ -87,11 +87,13 @@ private val blurProvider: BlurProvider by lazy {
         .firstOrNull() ?: NoOpBlurProvider
 }
 
-fun Modifier.surfaceBlur(): Modifier = composed {
-    with(blurProvider) { surfaceBlur() }
+fun Modifier.surfaceBlur(sourceKey: Any? = null, blurRadiusFraction: Float = 1f): Modifier = composed {
+    with(blurProvider) { surfaceBlur(sourceKey, blurRadiusFraction) }
 }
 // surfaceBlurElevated() and surfaceBlurSource() follow the same pattern
 ```
+
+The provider needs to be composable: the real implementation reads the theme’s blur tokens, the current `View` and remembered state.
 
 `AppTheme` goes back to exactly what it was before blur was introduced: no `HazeState`, no `CompositionLocal` for it.
 
@@ -99,7 +101,7 @@ fun Modifier.surfaceBlur(): Modifier = composed {
 
 It follows the existing module conventions (Android library, Kotlin, the shared Compose convention plugin) and contains two things:
 
-- `HazeBlurProvider`, a public class with a no-argument constructor that implements `BlurProvider` with Haze’s `hazeSource` / `hazeEffect`
+- `HazeBlurProvider`, a public class with a no-argument constructor that implements `BlurProvider` with Haze 2.0 (`hazeSource` for sources, and `hazeBlur` with a `HazeBlurStyle` from the `haze-blur` module for consumers)
 - the registration file, as a Java resource:
 
 ```text
@@ -118,11 +120,46 @@ On Android, `ServiceLoader` could mean reading `META-INF/services` from the APK 
 
 One thing to know: R8 skips this optimization if the interface is kept by a keep rule. So avoid a broad `-keep` on `BlurProvider`.
 
-### Accepted trade-off: one `HazeState` per process
+### Scoping `HazeState`: one per window, not per screen
 
-The original implementation isolated blur per screen through a `CompositionLocalProvider`. `ServiceLoader` has no composable hook for that kind of scoping, so the provider is a lazy singleton, with **one `HazeState` for the whole process**.
+The original implementation isolated blur per screen through a `CompositionLocalProvider`. `ServiceLoader` creates the provider once, outside any composition, so there is no natural place to provide state per screen.
 
-It is a conscious choice, documented in the code, to keep activation purely dependency-driven. If the team ever needs per-screen isolation, it will require explicit scoping in the apps, which was out of scope for this iteration.
+The first version took the simplest route: a single `HazeState` for the whole process. It worked, but it is too wide: separate Activities, like a full-screen HUD and a dashboard, would share blur sources even though they live in different windows.
+
+The current version scopes one `HazeState` per window, keyed by the root `View` (simplified):
+
+```kotlin
+class HazeBlurProvider : BlurProvider {
+    private val defaultHazeState by lazy { createHazeState() }
+    private val windowHazeStates = WeakHashMap<View, HazeState>()
+
+    private fun hazeStateForRootView(rootView: View?): HazeState {
+        if (rootView == null) return defaultHazeState
+        return synchronized(windowHazeStates) {
+            windowHazeStates.getOrPut(rootView) { createHazeState() }
+        }
+    }
+
+    @Composable
+    override fun Modifier.surfaceBlurSource(key: Any?, zIndex: Float): Modifier {
+        val rootView = LocalView.current.rootView
+        val hazeState = LocalHazeState.current ?: remember(rootView) { hazeStateForRootView(rootView) }
+        return hazeSource(state = hazeState, zIndex = zIndex, key = key)
+    }
+
+    // surfaceBlur() and surfaceBlurElevated() resolve the same HazeState
+    // and apply hazeBlur(...) with a HazeBlurStyle built from the theme tokens
+}
+```
+
+This gives the right boundaries:
+
+- several `ComposeView`s in the same Activity (for example a top bar in the Activity and the content in a Fragment) share one window, so they share blur sources;
+- separate Activities and windows never mix their blur sources;
+- the `WeakHashMap` lets each `HazeState` go away with its window;
+- a `LocalHazeState` override is still available when a screen really needs explicit scoping.
+
+The activation stays purely dependency-driven: no consumer has to provide anything.
 
 ## Test plan
 
@@ -135,12 +172,13 @@ It is a conscious choice, documented in the code, to keep activation purely depe
 
 1. **A design system should not impose dependencies on every consumer.** Opt-in features belong in opt-in modules.
 2. **Small sizes add up.** 25 KB is not much for one app, but it is paid by every app that uses the design system, on every download and update.
-3. **Trade-offs belong in the documentation.** A documented singleton `HazeState` is better than behaviour nobody can explain six months later.
+3. **Trade-offs belong in the documentation.** Where blur state lives, and why, is written next to the code, not left for someone to rediscover six months later.
 4. **The pattern is reusable.** Any feature that should switch on just by adding a module can follow the same shape.
 
 ## Lessons learned
 
 - Kotlin extension functions are resolved at compile time. Don’t expect them to behave like runtime dispatch.
+- Pick the scope of shared state on purpose. Per process was simple but too wide; per window matches how Android actually draws.
 - `ServiceLoader` is the standard way to detect whether an optional module is present.
 - R8 removes a lot, but not everything: a dependency on the classpath still has a measurable cost.
 - Explaining architectural trade-offs is part of the job, not just making it work.
