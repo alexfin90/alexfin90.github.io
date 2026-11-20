@@ -298,7 +298,7 @@ The honest reading: the gain is in the cost of creating modifiers, because nodes
 
 ## The impact on low-end devices
 
-This initiative was particularly relevant for hardware running older Android versions, including API 23 devices. The measurements above were taken on Android 14: the API 23 path is still to be verified on real hardware, and that is the next step.
+Our minimum SDK is 23, so the same design system also runs on older devices with weaker hardware. That is where these optimizations should matter most.
 
 On those devices, the frame budget is less forgiving. A few extra allocations, unnecessary recompositions, or repeated layout work can make the difference between a smooth interaction and visible jank.
 
@@ -315,6 +315,8 @@ The optimizations that mattered most were not necessarily the most visible ones:
 None of these changes is revolutionary on its own.
 
 Together, they can improve the consistency of frame delivery, especially during scrolling, animations, charts, progress indicators, and real-time UI.
+
+Our measurements were taken on Android 14 hardware. On API 23 devices the expectation is the same, only with less margin: less work per frame and fewer allocations matter more when there is less CPU and memory to absorb them.
 
 ## Making the decision repeatable
 
