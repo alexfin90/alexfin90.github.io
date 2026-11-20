@@ -127,7 +127,8 @@ export const loadArticles = (withDrafts = includeDrafts()): Article[] => {
       body,
     });
   }
-  return articles.sort((a, b) => b.date.localeCompare(a.date));
+  // Newest first; for the same date, the higher issue number first.
+  return articles.sort((a, b) => b.date.localeCompare(a.date) || (b.issue ?? 0) - (a.issue ?? 0));
 };
 
 export const toMeta = ({ body: _body, ...meta }: Article): ArticleMeta => meta;
