@@ -1,9 +1,9 @@
 ---
 title: How We Used Android’s Compose Performance Skills to Audit a Design System at Scale
 description: Using the official Jetpack Compose Performance skill to audit a Compose design system, migrating 27 modifiers to Modifier.Node, and measuring honestly what changed.
-date: 2026-11-29
+date: 2026-11-21
 series: What Broke in Android - Engineering Notes
-issue: 7
+issue: 6
 tags: [Jetpack Compose, Performance, Modifier.Node, Design System, Android Skills]
 cover: cover.jpg
 coverAlt: "Audit, don't patch: a repeatable performance checklist for a Compose design system. Work moves from the Composition lane down to Layout and Draw, deferred to the cheapest phase, next to a budget API 23 phone with a stable frame-time chart."
@@ -263,7 +263,7 @@ Performance work should not turn every abstraction into a more complex one.
 
 In one pull request we migrated the last 27 public modifiers of the design system from `composed` to `ModifierNodeElement` + `Modifier.Node`: backgrounds, borders, shadows, overlays and click handling. It had to be non-breaking: every signature stayed a plain, non-composable `fun Modifier.xyz(...): Modifier` with the same defaults, and the four themes had to keep working with a runtime theme switch.
 
-Three modifiers stayed `composed` on purpose: the blur extensions, because they wrap a public plugin interface implemented in a separate module (I wrote about that design in [Engineering Notes #6](/articles/making-a-design-system-dependency-optional-with-serviceloader/)). Migrating them would have broken that module. “Not every modifier needs Node” also means “some modifiers can’t move yet”.
+Three modifiers stayed `composed` on purpose: the blur extensions, because they wrap a public plugin interface implemented in a separate module (that design is the topic of the next issue of Engineering Notes). Migrating them would have broken that module. “Not every modifier needs Node” also means “some modifiers can’t move yet”.
 
 ## What the migration broke, and the tests that caught it
 
