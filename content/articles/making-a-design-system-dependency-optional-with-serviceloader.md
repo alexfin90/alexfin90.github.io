@@ -1,9 +1,9 @@
 ---
 title: "How I Made a Design System Dependency Optional with ServiceLoader (Without Touching the Consumer Apps)"
 description: A blur library added 24.6 KB to every app using our Compose design system. Moving it into an optional module discovered with ServiceLoader made it opt-in with zero changes in consumer code.
-date: 2026-11-21
+date: 2026-11-28
 series: What Broke in Android - Engineering Notes
-issue: 6
+issue: 7
 tags: [Jetpack Compose, Design System, Gradle, R8, Modularization]
 cover: cover.jpg
 coverAlt: "Make it optional: ServiceLoader turns a design system dependency into a plug-in module. A designsystem module with no blur dependency, an optional glass module discovered through ServiceLoader, and an app that turns blur on just by adding the module."
@@ -90,7 +90,7 @@ fun Modifier.surfaceBlur(sourceKey: Any? = null, blurRadiusFraction: Float = 1f)
 // surfaceBlurElevated() and surfaceBlurSource() follow the same pattern
 ```
 
-The provider needs to be composable: the real implementation reads the theme’s blur tokens, the current `View` and remembered state.
+The provider needs to be composable: the real implementation reads the theme’s blur tokens, the current `View` and remembered state. That is also why these three modifiers are still `composed`, the exception I mentioned in [Engineering Notes #6](/articles/compose-performance-skills-design-system-audit/) when we moved the rest of the design system to `Modifier.Node`.
 
 `AppTheme` goes back to exactly what it was before blur was introduced: no `HazeState`, no `CompositionLocal` for it.
 
