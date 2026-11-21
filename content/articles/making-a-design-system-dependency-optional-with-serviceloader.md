@@ -1,6 +1,6 @@
 ---
 title: "How I Made a Design System Dependency Optional with ServiceLoader (Without Touching the Consumer Apps)"
-description: A blur library added 24.6 KB to every app using our Compose design system. Moving it into an optional module discovered with ServiceLoader made it opt-in with zero changes in consumer code.
+description: A blur library ended up in every app using our Compose design system. Moving it into an optional module discovered with ServiceLoader made it opt-in with zero changes in consumer code.
 date: 2026-11-28
 series: What Broke in Android - Engineering Notes
 issue: 7
@@ -15,7 +15,9 @@ In a Compose design system used by several apps, a pull request introduced real 
 
 The problem: **every consumer app** now had Haze on its classpath, even apps that never used blur, or used a theme with `blur = 0.dp`.
 
-Measured impact: **+24.6 KB** on the release APK, with R8 enabled, even for apps that never called `.surfaceBlur()`.
+Measured impact when we made the change: **+24.6 KB** on the release APK, with R8 enabled, even for apps that never called `.surfaceBlur()`.
+
+Honestly, that is close to negligible. But the size was not the real problem. A design system that pulls a dependency into every consumer will keep doing it, the library can grow with each release, and the next dependency may not be this small. We wanted a way to add features without tying any app to their dependencies.
 
 The requirements were strict:
 
@@ -168,7 +170,7 @@ The activation stays purely dependency-driven: no consumer has to provide anythi
 ## Why this matters
 
 1. **A design system should not impose dependencies on every consumer.** Opt-in features belong in opt-in modules.
-2. **Small sizes add up.** 25 KB is not much for one app, but it is paid by every app that uses the design system, on every download and update.
+2. **The number will not stay the same.** 25 KB is not much today, but dependencies grow, and every app that uses the design system pays for them on every download and update. Fixing the structure once is cheaper than measuring each new library.
 3. **Trade-offs belong in the documentation.** Where blur state lives, and why, is written next to the code, not left for someone to rediscover six months later.
 4. **The pattern is reusable.** Any feature that should switch on just by adding a module can follow the same shape.
 
@@ -180,7 +182,7 @@ The activation stays purely dependency-driven: no consumer has to provide anythi
 - R8 removes a lot, but not everything: a dependency on the classpath still has a measurable cost.
 - Explaining architectural trade-offs is part of the job, not just making it work.
 
-**TL;DR:** with `ServiceLoader`, Haze became an optional plugin of a Compose design system. Apps that don’t use blur save 24.6 KB, and no consumer had to change a single line of code.
+**TL;DR:** with `ServiceLoader`, Haze became an optional plugin of a Compose design system. The size saved today is small; what matters is that apps no longer inherit a dependency they don’t use, and no consumer had to change a single line of code.
 
 ## References
 
