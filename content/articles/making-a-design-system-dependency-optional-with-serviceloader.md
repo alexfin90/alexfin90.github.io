@@ -1,7 +1,7 @@
 ---
 title: "How I Made a Design System Dependency Optional with ServiceLoader (Without Touching the Consumer Apps)"
 description: A blur library ended up in every app using our Compose design system. Moving it into an optional module discovered with ServiceLoader made it opt-in with zero changes in consumer code.
-date: 2026-11-28
+date: 2026-11-27
 series: What Broke in Android - Engineering Notes
 issue: 7
 tags: [Jetpack Compose, Design System, Gradle, R8, Modularization]
